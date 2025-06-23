@@ -1,0 +1,8 @@
+{
+  "server_url": "http://localhost:8081/api/report",
+  "access_token": "secret-token",
+  "miner_name": "miner-local-1",
+  "interval_seconds": 30,
+  "xmrig_api": "http://127.0.0.1:16000",
+  "xmrig_token": "secret-token"
+}
