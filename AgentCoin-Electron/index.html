@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AgentCoin Miner</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 6px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🪙 AgentCoin Miner</h1>
+
+    <label>
+      Server IP:
+      <input
+        type="text"
+        id="serverIp"
+        placeholder="Enter Server IP (e.g. 192.168.1.10)"
+      />
+    </label>
+    <label>
+      Worker:
+      <input
+        type="text"
+        id="minerName"
+        placeholder="Enter Miner Name (e.g. miner-office-01)"
+      />
+    </label>
+    <button onclick="saveConfig()">Save Config</button>
+
+    <label>
+      <input type="checkbox" id="consoleToggle" checked />
+      Show miner console
+    </label>
+
+    <div style="margin-top: 20px">
+      <button onclick="startMiner()">▶️ Start Miner</button>
+      <button onclick="stopMiner()">⛔ Stop Miner</button>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

@@ -24,7 +24,7 @@ export default function Dashboard() {
 
     const interval = setInterval(() => {
       fetchMiners(); // Load lại mỗi 60s
-    }, 60000); // 60000 ms = 60 giây
+    }, 30000); // 60000 ms = 60 giây
 
     return () => clearInterval(interval); // Xoá interval khi unmount
   }, []);

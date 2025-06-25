@@ -1,0 +1,214 @@
+ * ABOUT        XMRig/6.23.0 clang/13.0.0 (built for macOS x86-64, 64 bit)
+ * LIBS         libuv/1.51.0 OpenSSL/3.5.0 hwloc/2.12.1
+ * HUGE PAGES   supported
+ * 1GB PAGES    unavailable
+ * CPU          Intel(R) Xeon(R) CPU E3-1270 v3 @ 3.50GHz (1) 64-bit AES
+                L2:1.0 MB L3:8.0 MB 4C/8T NUMA:1
+ * MEMORY       15.9/16.0 GB (100%)
+                DIMM_A0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_A1: <empty>
+                DIMM_B0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_B1: <empty>
+ * MOTHERBOARD  Gigabyte Technology Co., Ltd. - Mac-7BA5B2D9E42DDD94
+ * DONATE       1%
+ * ASSEMBLY     auto:intel
+ * POOL #1      pool.supportxmr.com:3333 algo auto
+ * COMMANDS     hashrate, pause, resume, results, connection
+ * HTTP API     127.0.0.1:16000 
+ * OPENCL       disabled
+ * CUDA         disabled
+[2025-06-24 21:31:07.064]  net      use pool pool.supportxmr.com:3333  15.235.229.148
+[2025-06-24 21:31:07.065]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441043 (11 tx)
+[2025-06-24 21:31:07.065]  cpu      use argon2 implementation AVX2
+[2025-06-24 21:31:07.065]  randomx  init dataset algo rx/0 (8 threads) seed f67688520da7ab11...
+[2025-06-24 21:31:08.797]  randomx  allocated 2336 MB (2080+256) huge pages 0% 0/1168 +JIT (1732 ms)
+[2025-06-24 21:31:15.378]  randomx  dataset ready (6581 ms)
+[2025-06-24 21:31:15.378]  cpu      use profile  rx  (3 threads) scratchpad 2048 KB
+[2025-06-24 21:31:17.721]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441043 (12 tx)
+[2025-06-24 21:31:17.724]  cpu      READY threads 3/3 (3) huge pages 33% 1/3 memory 6144 KB (2345 ms)
+[2025-06-24 21:31:26.494]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441043 (15 tx)
+[2025-06-24 21:31:36.518]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441043 (19 tx)
+[2025-06-24 21:31:46.579]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441043 (21 tx)
+[2025-06-24 21:31:54.830]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (4 tx)
+[2025-06-24 21:32:05.023]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (7 tx)
+[2025-06-24 21:32:15.076]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (12 tx)
+[2025-06-24 21:32:16.816]  miner    speed 10s/60s/15m 824.3 881.1 n/a H/s max 949.1 H/s
+[2025-06-24 21:32:25.095]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (15 tx)
+[2025-06-24 21:32:35.154]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (19 tx)
+[2025-06-24 21:32:46.897]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (20 tx)
+[2025-06-24 21:32:57.105]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (25 tx)
+[2025-06-24 21:33:07.158]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (28 tx)
+[2025-06-24 21:33:14.111]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441045 (4 tx)
+[2025-06-24 21:33:16.903]  miner    speed 10s/60s/15m 495.2 504.0 n/a H/s max 949.1 H/s
+[2025-06-24 21:33:24.187]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441045 (8 tx)
+CUDA         disabled
+[2025-06-24 21:32:19.342]  net      use pool pool.supportxmr.com:3333  15.235.229.147
+[2025-06-24 21:32:19.342]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (12 tx)
+[2025-06-24 21:32:19.342]  cpu      use argon2 implementation AVX2
+[2025-06-24 21:32:19.342]  randomx  init dataset algo rx/0 (8 threads) seed f67688520da7ab11...
+[2025-06-24 21:32:20.875]  randomx  allocated 2336 MB (2080+256) huge pages 0% 0/1168 +JIT (1532 ms)
+[2025-06-24 21:32:25.406]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (15 tx)
+[2025-06-24 21:32:28.552]  randomx  dataset ready (7677 ms)
+[2025-06-24 21:32:28.552]  cpu      use profile  rx  (3 threads) scratchpad 2048 KB
+[2025-06-24 21:32:32.924]  cpu      READY threads 3/3 (3) huge pages 0% 0/3 memory 6144 KB (4372 ms)
+[2025-06-24 21:32:35.427]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441044 (19 tx)
+[2025-06-24 21:32:40.448]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441044 (19 tx)
+[2025-06-24 21:32:46.738]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441044 (20 tx)
+[2025-06-24 21:32:51.380]  cpu      accepted (1/0) diff 102273 (40 ms)
+[2025-06-24 21:32:56.808]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441044 (25 tx)
+[2025-06-24 21:33:06.908]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441044 (28 tx)
+[2025-06-24 21:33:14.122]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441045 (4 tx)
+[2025-06-24 21:33:24.186]  net      new job from pool.supportxmr.com:3333 diff 102273 algo rx/0 height 3441045 (8 tx)
+ * ABOUT        XMRig/6.23.0 clang/13.0.0 (built for macOS x86-64, 64 bit)
+ * LIBS         libuv/1.51.0 OpenSSL/3.5.0 hwloc/2.12.1
+ * HUGE PAGES   supported
+ * 1GB PAGES    unavailable
+ * CPU          Intel(R) Xeon(R) CPU E3-1270 v3 @ 3.50GHz (1) 64-bit AES
+                L2:1.0 MB L3:8.0 MB 4C/8T NUMA:1
+ * MEMORY       11.2/16.0 GB (70%)
+                DIMM_A0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_A1: <empty>
+                DIMM_B0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_B1: <empty>
+ * MOTHERBOARD  Gigabyte Technology Co., Ltd. - Mac-7BA5B2D9E42DDD94
+ * DONATE       1%
+ * ASSEMBLY     auto:intel
+ * POOL #1      pool.supportxmr.com:3333 algo auto
+ * COMMANDS     hashrate, pause, resume, results, connection
+ * HTTP API     127.0.0.1:16000 
+ * OPENCL       disabled
+ * CUDA         disabled
+[2025-06-24 22:20:03.474]  net      use pool pool.supportxmr.com:3333  15.235.229.127
+[2025-06-24 22:20:03.474]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441067 (51 tx)
+[2025-06-24 22:20:03.474]  cpu      use argon2 implementation AVX2
+[2025-06-24 22:20:03.474]  randomx  init dataset algo rx/0 (8 threads) seed f67688520da7ab11...
+[2025-06-24 22:20:04.863]  randomx  allocated 2336 MB (2080+256) huge pages 0% 0/1168 +JIT (1388 ms)
+[2025-06-24 22:20:10.449]  randomx  dataset ready (5587 ms)
+[2025-06-24 22:20:10.450]  cpu      use profile  rx  (3 threads) scratchpad 2048 KB
+[2025-06-24 22:20:10.900]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441067 (59 tx)
+[2025-06-24 22:20:13.912]  cpu      READY threads 3/3 (3) huge pages 0% 0/3 memory 6144 KB (3463 ms)
+[2025-06-24 22:20:20.924]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441067 (60 tx)
+[2025-06-24 22:20:31.133]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441067 (62 tx)
+[2025-06-24 22:20:36.393]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (2 tx)
+[2025-06-24 22:20:51.215]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (3 tx)
+[2025-06-24 22:20:53.802]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (4 tx)
+[2025-06-24 22:21:01.373]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (6 tx)
+[2025-06-24 22:21:10.609]  miner    speed 10s/60s/15m 897.2 n/a n/a H/s max 954.0 H/s
+[2025-06-24 22:21:11.465]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (8 tx)
+[2025-06-24 22:21:21.470]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (9 tx)
+[2025-06-24 22:21:25.654]  cpu      accepted (1/0) diff 75000 (42 ms)
+[2025-06-24 22:21:31.509]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (13 tx)
+[2025-06-24 22:21:41.804]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (17 tx)
+[2025-06-24 22:21:44.270]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (17 tx)
+[2025-06-24 22:21:51.906]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (21 tx)
+[2025-06-24 22:22:01.940]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (25 tx)
+[2025-06-24 22:22:10.691]  miner    speed 10s/60s/15m 829.4 886.1 n/a H/s max 954.0 H/s
+[2025-06-24 22:22:12.015]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (31 tx)
+[2025-06-24 22:22:22.131]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (35 tx)
+[2025-06-24 22:22:28.138]  cpu      accepted (2/0) diff 75000 (48 ms)
+[2025-06-24 22:22:32.425]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (37 tx)
+[2025-06-24 22:22:42.424]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (40 tx)
+[2025-06-24 22:22:44.363]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (40 tx)
+.50GHz (1) 64-bit AES
+                L2:1.0 MB L3:8.0 MB 4C/8T NUMA:1
+ * MEMORY       13.6/16.0 GB (85%)
+                DIMM_A0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_A1: <empty>
+                DIMM_B0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_B1: <empty>
+ * MOTHERBOARD  Gigabyte Technology Co., Ltd. - Mac-7BA5B2D9E42DDD94
+ * DONATE       1%
+ * ASSEMBLY     auto:intel
+ * POOL #1      pool.supportxmr.com:3333 algo auto
+ * COMMANDS     hashrate, pause, resume, results, connection
+ * HTTP API     127.0.0.1:16000 address already in use
+[2025-06-24 22:22:37.821]  net      HTTP API server failed to start.
+ * OPENCL       disabled
+ * CUDA         disabled
+[2025-06-24 22:22:37.882]  net      use pool pool.supportxmr.com:3333  15.235.229.147
+[2025-06-24 22:22:37.882]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (37 tx)
+[2025-06-24 22:22:37.882]  cpu      use argon2 implementation AVX2
+[2025-06-24 22:22:37.882]  randomx  init dataset algo rx/0 (8 threads) seed f67688520da7ab11...
+[2025-06-24 22:22:39.209]  randomx  allocated 2336 MB (2080+256) huge pages 0% 0/1168 +JIT (1327 ms)
+[2025-06-24 22:22:42.726]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (40 tx)
+[2025-06-24 22:22:44.063]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (40 tx)
+[2025-06-24 22:22:47.457]  randomx  dataset ready (8249 ms)
+[2025-06-24 22:22:47.457]  cpu      use profile  rx  (3 threads) scratchpad 2048 KB
+[2025-06-24 22:22:50.658]  cpu      READY threads 3/3 (3) huge pages 33% 1/3 memory 6144 KB (3201 ms)
+[2025-06-24 22:22:52.797]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (43 tx)
+[2025-06-24 22:23:02.901]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (46 tx)
+[2025-06-24 22:23:15.232]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (47 tx)
+[2025-06-24 22:23:23.067]  cpu      accepted (1/0) diff 132356 (42 ms)
+[2025-06-24 22:23:25.490]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (49 tx)
+[2025-06-24 22:23:35.601]  net      new job from pool.supportxmr.com:3333 diff 132356 algo rx/0 height 3441068 (50 tx)
+[2025-06-24 22:23:44.138]  net      new job from pool.supportxmr.com:3333 diff 90226 algo rx/0 height 3441068 (50 tx)
+[2025-06-24 22:23:45.812]  net      new job from pool.supportxmr.com:3333 diff 90226 algo rx/0 height 3441068 (54 tx)
+[2025-06-24 22:23:47.713]  miner    speed 10s/60s/15m 813.9 n/a n/a H/s max 863.7 H/s
+[2025-06-24 22:23:55.953]  net      new job from pool.supportxmr.com:3333 diff 90226 algo rx/0 height 3441068 (56 tx)
+ 13.6/16.0 GB (85%)
+                DIMM_A0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_A1: <empty>
+                DIMM_B0: 8 GB DDR3 @ 1333 MHz F3-1600C11-8GNT
+                DIMM_B1: <empty>
+ * MOTHERBOARD  Gigabyte Technology Co., Ltd. - Mac-7BA5B2D9E42DDD94
+ * DONATE       1%
+ * ASSEMBLY     auto:intel
+ * POOL #1      pool.supportxmr.com:3333 algo auto
+ * COMMANDS     hashrate, pause, resume, results, connection
+ * HTTP API     127.0.0.1:16000 
+ * OPENCL       disabled
+ * CUDA         disabled
+[2025-06-24 22:23:45.416]  net      use pool pool.supportxmr.com:3333  15.235.229.127
+[2025-06-24 22:23:45.417]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (50 tx)
+[2025-06-24 22:23:45.417]  cpu      use argon2 implementation AVX2
+[2025-06-24 22:23:45.417]  randomx  init dataset algo rx/0 (8 threads) seed f67688520da7ab11...
+[2025-06-24 22:23:45.600]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (54 tx)
+[2025-06-24 22:23:46.815]  randomx  allocated 2336 MB (2080+256) huge pages 0% 0/1168 +JIT (1398 ms)
+[2025-06-24 22:23:54.411]  randomx  dataset ready (7596 ms)
+[2025-06-24 22:23:54.411]  cpu      use profile  rx  (3 threads) scratchpad 2048 KB
+[2025-06-24 22:23:57.770]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (56 tx)
+[2025-06-24 22:23:58.441]  cpu      READY threads 3/3 (3) huge pages 0% 0/3 memory 6144 KB (4030 ms)
+[2025-06-24 22:24:09.181]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (57 tx)
+[2025-06-24 22:24:19.386]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (59 tx)
+[2025-06-24 22:24:29.641]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (63 tx)
+[2025-06-24 22:24:34.322]  cpu      accepted (1/0) diff 75000 (41 ms)
+[2025-06-24 22:24:44.737]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (64 tx)
+[2025-06-24 22:24:53.613]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (69 tx)
+[2025-06-24 22:24:55.686]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (70 tx)
+[2025-06-24 22:24:56.867]  miner    speed 10s/60s/15m 607.1 715.3 n/a H/s max 872.1 H/s
+[2025-06-24 22:25:05.756]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441068 (71 tx)
+[2025-06-24 22:25:06.762]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (1 tx)
+[2025-06-24 22:25:16.777]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (3 tx)
+[2025-06-24 22:25:24.508]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (3 tx)
+[2025-06-24 22:25:27.031]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (6 tx)
+[2025-06-24 22:25:37.200]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (8 tx)
+[2025-06-24 22:25:47.246]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (11 tx)
+[2025-06-24 22:25:53.834]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (13 tx)
+[2025-06-24 22:25:57.108]  miner    speed 10s/60s/15m 786.0 814.3 n/a H/s max 896.6 H/s
+[2025-06-24 22:25:59.708]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (14 tx)
+[2025-06-24 22:25:59.798]  cpu      accepted (2/0) diff 75000 (40 ms)
+[2025-06-24 22:26:09.795]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (20 tx)
+[2025-06-24 22:26:10.876]  cpu      accepted (3/0) diff 75000 (41 ms)
+[2025-06-24 22:26:19.835]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (25 tx)
+[2025-06-24 22:26:24.562]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (25 tx)
+[2025-06-24 22:26:30.094]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (29 tx)
+[2025-06-24 22:26:40.166]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (33 tx)
+[2025-06-24 22:26:48.422]  cpu      accepted (4/0) diff 75000 (40 ms)
+[2025-06-24 22:26:50.279]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (36 tx)
+[2025-06-24 22:26:57.222]  miner    speed 10s/60s/15m 526.6 767.1 n/a H/s max 896.6 H/s
+[2025-06-24 22:27:00.380]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (41 tx)
+[2025-06-24 22:27:10.448]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (44 tx)
+[2025-06-24 22:27:20.528]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (47 tx)
+[2025-06-24 22:27:24.605]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (47 tx)
+[2025-06-24 22:27:30.590]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (53 tx)
+[2025-06-24 22:27:40.687]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (54 tx)
+[2025-06-24 22:27:50.791]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (55 tx)
+[2025-06-24 22:27:57.769]  miner    speed 10s/60s/15m 646.8 552.1 n/a H/s max 896.6 H/s
+[2025-06-24 22:28:00.990]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (56 tx)
+[2025-06-24 22:28:11.249]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (58 tx)
+[2025-06-24 22:28:21.548]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (62 tx)
+[2025-06-24 22:28:24.646]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (62 tx)
+[2025-06-24 22:28:33.793]  cpu      accepted (5/0) diff 75000 (40 ms)
+[2025-06-24 22:28:37.248]  cpu      accepted (6/0) diff 75000 (27 ms)
+[2025-06-24 22:28:37.565]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (63 tx)
+[2025-06-24 22:28:47.780]  net      new job from pool.supportxmr.com:3333 diff 75000 algo rx/0 height 3441069 (66 tx)
