@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"backend/database"
 	"backend/models"
 	"net/http"
 
@@ -16,9 +15,9 @@ func ReportMinerStatus(c *gin.Context) {
 	}
 
 	var existing models.MinerStatus
-	if err := database.DB.Where("name = ? AND ip_address = ?", input.Name, input.IPAddress).First(&existing).Error; err != nil {
+	if err := models.DB.Where("name = ? AND ip_address = ?", input.Name, input.IPAddress).First(&existing).Error; err != nil {
 		// ❌ Không tồn tại -> tạo mới
-		if err := database.DB.Create(&input).Error; err != nil {
+		if err := models.DB.Create(&input).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot create"})
 			return
 		}
@@ -28,7 +27,7 @@ func ReportMinerStatus(c *gin.Context) {
 
 	// ✅ Tồn tại -> cập nhật
 	input.ID = existing.ID
-	if err := database.DB.Save(&input).Error; err != nil {
+	if err := models.DB.Save(&input).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot update"})
 		return
 	}

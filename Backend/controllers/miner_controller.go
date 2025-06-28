@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"backend/database"
 	"backend/models"
 	"encoding/json"
 	"net/http"
@@ -15,7 +14,7 @@ func GetAllMiners(c *gin.Context) {
 	var miners []models.MinerStatus
 
 	// Lấy các bản ghi mới nhất mỗi miner (theo Name)
-	err := database.DB.
+	err := models.DB.
 		Raw(`
 			SELECT * FROM miner_statuses m1
 			WHERE m1.id = (
@@ -27,7 +26,7 @@ func GetAllMiners(c *gin.Context) {
 		`).Scan(&miners).Error
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "models error"})
 		return
 	}
 
