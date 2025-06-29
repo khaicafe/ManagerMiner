@@ -206,10 +206,11 @@ const MinersScreen = () => {
         );
       },
     },
-    { field: "name", headerName: "Name", width: 150 },
+    { field: "name", headerName: "Worker", width: 150 },
     { field: "wallet_address", headerName: "wallet_address", width: 150 },
     { field: "ip", headerName: "IP", width: 150 },
     { field: "hashrate", headerName: "Hashrate", width: 130 },
+    { field: "max_threads_hint", headerName: "max_threads_hint", width: 100 },
     { field: "threads", headerName: "Threads", width: 100 },
     { field: "temperature", headerName: "Temp (°C)", width: 120 },
     { field: "uptime", headerName: "Uptime (s)", width: 130 },
