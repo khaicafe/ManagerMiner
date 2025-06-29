@@ -55,8 +55,38 @@ func SetupRouter() *gin.Engine {
 		api.POST("/auth/login", controllers.Login)
 		api.POST("/auth/reset-password", controllers.ResetPassword)
 
-		r.POST("/api/report", controllers.ReportMinerStatus)
-		r.GET("/api/miners", controllers.GetAllMiners)
+		//
+		api.POST("/report", controllers.ReportMinerStatus)
+		api.GET("/miners", controllers.GetAllMiners)
+		api.POST("/miners/update-list", controllers.UpdateMinersList)
+		api.GET("/miners/config/:deviceID", controllers.GetMinerConfig)
+
+		//
+		api.GET("/coins-all", controllers.GetAllCoins)
+		api.DELETE("/coins/:id/full", controllers.DeleteCoinFull)
+		api.POST("/coins/full", controllers.CreateCoinFull)
+		api.PUT("/coins/:id/full", controllers.UpdateCoinFull)
+
+		// Coin
+		api.GET("/coins", controllers.GetCoins)
+		api.GET("/coins/:id", controllers.GetCoin)
+		api.POST("/coins", controllers.CreateCoin)
+		api.PUT("/coins/:id", controllers.UpdateCoin)
+		api.DELETE("/coins/:id", controllers.DeleteCoin)
+
+		// Pool
+		api.GET("/pools", controllers.GetPools)
+		api.GET("/pools/:id", controllers.GetPool)
+		api.POST("/pools", controllers.CreatePool)
+		api.PUT("/pools/:id", controllers.UpdatePool)
+		api.DELETE("/pools/:id", controllers.DeletePool)
+
+		// Wallet
+		api.GET("/wallets", controllers.GetWallets)
+		api.GET("/wallets/:id", controllers.GetWallet)
+		api.POST("/wallets", controllers.CreateWallet)
+		api.PUT("/wallets/:id", controllers.UpdateWallet)
+		api.DELETE("/wallets/:id", controllers.DeleteWallet)
 
 	}
 

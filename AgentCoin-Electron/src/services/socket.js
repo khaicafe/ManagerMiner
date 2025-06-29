@@ -71,9 +71,9 @@ function initSocket(onConnectedCallback) {
     console.error("⚠️ Connect error:", error);
   });
 
-  socket.on("notification", (data) => {
-    console.log("🔔 Notification received:", data);
-  });
+  //   socket.on("notification", (data) => {
+  //     console.log("🔔 Notification received:", data);
+  //   });
 }
 
 function sendNotification(data) {
@@ -81,6 +81,12 @@ function sendNotification(data) {
     socket.emit("notification_Client", data);
   } else {
     console.warn("⚠️ Socket not connected. Cannot send data.");
+  }
+}
+
+function on(event, callback) {
+  if (socket) {
+    socket.on(event, callback);
   }
 }
 
@@ -94,4 +100,5 @@ module.exports = {
   initSocket,
   sendNotification,
   closeSocket,
+  on,
 };

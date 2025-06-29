@@ -1,5 +1,13 @@
 const permissions = {
-  admin: ["/user-management", "/customerManager", "/deviceScreen", "/settings"],
+  admin: [
+    "/user-management",
+    "/customerManager",
+    "/deviceScreen",
+    "/settings",
+    "/coinList",
+    "/poolList",
+    "/walletList",
+  ],
   manager: [
     "/deviceScreen",
     "/reportType",

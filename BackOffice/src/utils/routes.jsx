@@ -18,12 +18,9 @@ const routes = [
   { type: "divider" },
   { path: "/user-management", label: "User Management", icon: <PeopleIcon /> },
   { path: "/deviceScreen", label: "List Device", icon: <PeopleIcon /> },
-
-  {
-    path: "/settings",
-    label: "Settings",
-    icon: <PeopleIcon />,
-  },
+  // { path: "/coinList", label: "Coin List", icon: <PeopleIcon /> },
+  { path: "/poolList", label: "Pool List", icon: <PeopleIcon /> },
+  { path: "/walletList", label: "Wallet List", icon: <PeopleIcon /> },
 ];
 
 export default routes;

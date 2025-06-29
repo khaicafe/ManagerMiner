@@ -1,32 +1,172 @@
 import React, { useEffect, useState } from "react";
-import { getAllMiners } from "../services/api";
+import {
+  getAllMiners,
+  getPools,
+  getWallets,
+  updateMiner,
+} from "../services/api";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Slider,
+} from "@mui/material";
+import isEqual from "lodash/isEqual";
 
 const MinersScreen = () => {
   const [miners, setMiners] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const [editModal, setEditModal] = useState(false);
+  const [pools, setPools] = useState([]);
+  const [wallets, setWallets] = useState([]);
+  const [selectedPool, setSelectedPool] = useState("");
+  const [selectedWallet, setSelectedWallet] = useState("");
+  const [maxThreadsHint, setMaxThreadsHint] = useState(50);
+
+  // Load miners
+  const refreshMiners = async () => {
+    try {
+      const res = await getAllMiners();
+      const minersWithId = res.data?.map((item) => ({
+        id: item.ID,
+        ...item,
+      }));
+
+      if (!isEqual(minersWithId, miners)) {
+        setMiners(minersWithId);
+        console.log("✅ Updated miners data", minersWithId);
+      } else {
+        console.log("⚠️ No changes in miners data");
+      }
+    } catch (error) {
+      console.error("Error fetching miners:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMiners = async () => {
-      try {
-        const res = await getAllMiners();
-        // Add id property for DataGrid
-        const minersWithId = res.data?.map((item, index) => ({
-          id: index + 1,
-          ...item,
-        }));
-        setMiners(minersWithId);
-      } catch (error) {
-        console.error("Error fetching miners:", error);
-      }
-    };
-
-    fetchMiners();
+    refreshMiners();
+    const interval = setInterval(() => refreshMiners(), 10000);
+    return () => clearInterval(interval);
   }, []);
 
+  const openEditModal = async () => {
+    try {
+      const [poolRes, walletRes] = await Promise.all([
+        getPools(),
+        getWallets(),
+      ]);
+      setPools(poolRes.data);
+      setWallets(walletRes.data);
+      setEditModal(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      if (!selectedPool || !selectedWallet) {
+        alert("Please select both pool and wallet.");
+        return;
+      }
+
+      const selectedMiners = miners.filter((m) => selectedIds.includes(m.id));
+
+      const payload = selectedMiners.map((miner) => ({
+        id: miner.id,
+        pool_url: pools.find((p) => p.ID === selectedPool)?.url || "",
+        pool_port: pools.find((p) => p.ID === selectedPool)?.port || 0,
+        wallet_address:
+          wallets.find((w) => w.ID === selectedWallet)?.address || "",
+        max_threads_hint: maxThreadsHint,
+      }));
+
+      console.log("🚀 Updating miners with payload:", payload);
+
+      await updateMiner(payload);
+
+      setEditModal(false);
+      refreshMiners();
+      resetEditModal();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const resetEditModal = () => {
+    setSelectedPool("");
+    setSelectedWallet("");
+    setMaxThreadsHint(50);
+    setSelectedIds([]);
+  };
+
+  const deviceCounts = miners.reduce((acc, miner) => {
+    acc[miner.deviceID] = (acc[miner.deviceID] || 0) + 1;
+    return acc;
+  }, {});
+
   const columns = [
-    { field: "deviceID", headerName: "Device ID", width: 120 },
-    { field: "Status", headerName: "status", width: 150 },
+    {
+      field: "deviceID",
+      headerName: "Device ID",
+      width: 200,
+      renderCell: (params) => {
+        const duplicate = deviceCounts[params.row.deviceID] > 1 ? "⚠️ " : "";
+        return (
+          <span style={{ color: duplicate ? "orange" : "inherit" }}>
+            {duplicate}
+            {params.row.deviceID}
+          </span>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 150,
+      renderCell: (params) => {
+        const status = params.row.status;
+        return (
+          <span
+            style={{
+              color: status ? "green" : "red",
+              fontWeight: "bold",
+            }}
+          >
+            {status ? "Online" : "Offline"}
+          </span>
+        );
+      },
+    },
+    {
+      field: "is_mining",
+      headerName: "Mining",
+      width: 120,
+      renderCell: (params) => {
+        const mining = params.row.is_mining === "Running";
+        return (
+          <span
+            style={{
+              color: mining ? "green" : "gray",
+              fontWeight: "bold",
+            }}
+          >
+            {params.row.is_mining}
+          </span>
+        );
+      },
+    },
     { field: "name", headerName: "Name", width: 150 },
     { field: "ip", headerName: "IP", width: 150 },
     { field: "hashrate", headerName: "Hashrate", width: 130 },
@@ -44,13 +184,90 @@ const MinersScreen = () => {
       <Typography variant="h4" gutterBottom>
         Miners
       </Typography>
+
+      <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+        <Button
+          variant="contained"
+          disabled={selectedIds.length === 0}
+          onClick={openEditModal}
+        >
+          Edit Selected
+        </Button>
+      </Stack>
+
       <DataGrid
         rows={miners}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
+        pageSize={10}
+        checkboxSelection
         disableSelectionOnClick
+        onRowSelectionModelChange={(selectionModel) => {
+          let idsArray = [];
+
+          if (selectionModel?.ids) {
+            idsArray = Array.from(selectionModel.ids);
+          } else if (Array.isArray(selectionModel)) {
+            idsArray = selectionModel;
+          }
+
+          console.log("✅ Selected IDs:", idsArray);
+          setSelectedIds(idsArray);
+        }}
       />
+
+      <Dialog open={editModal} onClose={() => setEditModal(false)} fullWidth>
+        <DialogTitle>Edit Miners</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Pool</InputLabel>
+            <Select
+              value={selectedPool}
+              label="Pool"
+              onChange={(e) => setSelectedPool(e.target.value)}
+            >
+              {pools.map((pool) => (
+                <MenuItem key={pool.ID} value={pool.ID}>
+                  {pool.name} ({pool.url}:{pool.port})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Wallet</InputLabel>
+            <Select
+              value={selectedWallet}
+              label="Wallet"
+              onChange={(e) => setSelectedWallet(e.target.value)}
+            >
+              {wallets.map((wallet) => (
+                <MenuItem key={wallet.ID} value={wallet.ID}>
+                  {wallet.name} - {wallet.address}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Box sx={{ mt: 4 }}>
+            <Typography gutterBottom>
+              Max Threads Hint: {maxThreadsHint}
+            </Typography>
+            <Slider
+              value={maxThreadsHint}
+              onChange={(e, newValue) => setMaxThreadsHint(newValue)}
+              min={0}
+              max={100}
+              step={1}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditModal(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleEdit}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

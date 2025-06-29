@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"backend/models"
 	"fmt"
 	"log"
 	"sync"
@@ -45,6 +46,14 @@ func InitSocketServer() (*socketio.Server, error) {
 		// Handle reconnected notifications
 		handleClientReconnect(userID, s)
 		log.Println("✅ User registered:", userID, "with socket ID:", s.ID())
+
+		// ghi nhận trạng thái status
+		err := updateMinerStatus(userID, true)
+		if err != nil {
+			log.Println("Error updating online status:", err)
+		} else {
+			log.Println("✅ Device", userID, "is Online")
+		}
 	})
 
 	// On receiving a notification from a client
@@ -80,6 +89,14 @@ func InitSocketServer() (*socketio.Server, error) {
 			}
 		}
 		mu.Unlock()
+
+		// ghi nhận trạng thái status
+		err := updateMinerStatus(userID, false)
+		if err != nil {
+			log.Println("Error updating offline status:", err)
+		} else {
+			log.Println("✅ Device", userID, "is OFFLINE")
+		}
 
 		fmt.Println("User disconnected:", userID, "Socket:", s.ID())
 	})
@@ -150,4 +167,12 @@ func handleClientReconnect(userID string, s socketio.Conn) {
 		}
 		delete(notifications, userID) // Clear notifications after sending
 	}
+}
+
+func updateMinerStatus(deviceID string, online bool) error {
+	result := models.DB.Model(&models.MinerStatus{}).
+		Where("device_id = ?", deviceID).
+		Update("status", online)
+
+	return result.Error
 }

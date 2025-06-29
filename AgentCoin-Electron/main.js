@@ -11,7 +11,11 @@ const minerConfigPath = path.join(__dirname, "miner.json");
 const xmrigConfigPath = path.join(__dirname, "xmrig", "config.json");
 const logPath = path.join(__dirname, "xmrig", "xmrig.log");
 
-const { reportMinerStatus } = require("./src/services/minerService");
+const {
+  reportMinerStatus,
+  getMinerConfig,
+} = require("./src/services/minerService");
+const minerConfig = require("./src/services/minerConfig.js");
 
 let mainWindow;
 let minerProcess = null;
@@ -21,6 +25,12 @@ let minerStatus = "Stopped";
 let minerStdout = null;
 let aboutInfoCache = null;
 const os = require("os");
+let wallet = minerConfig.getWallet();
+let pool = minerConfig.getPool();
+
+///////////// config.json wallet /////////////
+console.log("Current wallet:", wallet);
+console.log("Current pool:", pool);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -299,7 +309,13 @@ async function getMinerInfo() {
   const cpuUsage = await getCPUUsagePercent();
   const { timestamp, hashrate, threads } = parseHashrateFromLog();
   const deviceID = getDeviceUUID();
-  console.log("timestamp", timestamp);
+  const wallet = minerConfig.getWallet();
+  const pool = minerConfig.getPool();
+  const [url, portStr] = pool.split(":");
+  const port = parseInt(portStr, 10);
+  const max_threads_hint = minerConfig.getMaxThreadsHint();
+
+  console.log("timestamp", pool, wallet);
 
   const payload = {
     deviceID,
@@ -313,7 +329,13 @@ async function getMinerInfo() {
     last_log: lastLog,
     cpu_model: cpuModel,
     cpu_usage: cpuUsage,
+    is_mining: minerStatus,
+    pool_url: url,
+    pool_port: port,
+    wallet_address: wallet,
+    max_threads_hint,
   };
+  // console.log("handleReport", payload);
   handleReport(payload);
   return payload;
 }
@@ -600,12 +622,45 @@ socketModule.initSocket(() => {
   socketModule.sendNotification({
     message: "Hello from Electron!",
   });
-});
 
-// Lúc cần disconnect:
-setTimeout(() => {
-  socketModule.closeSocket();
-}, 30000);
+  socketModule.on("notification", async (data) => {
+    // console.log("🔔 Notification received:", data);
+    switch (data.content) {
+      case "start_miner":
+        // code chạy miner
+        console.log("⚡️ Server muốn start miner:", data);
+        break;
+
+      case "stop_miner":
+        // code stop miner
+        console.log("⚡️ Server muốn start miner:", data);
+        // stopMiner()
+        break;
+      case "update_config":
+        console.log("⚡️ Server muốn set_miner_config:", data);
+
+        const deviceID = getDeviceUUID();
+        try {
+          const res = await getMinerConfig(deviceID);
+          console.log("res", res);
+          minerConfig.setMinerConfig({
+            wallet: res.wallet_address_config,
+            pool: res.pool_url_config + ":" + res.pool_port_config,
+            threadsHint: res.max_threads_hint_config,
+          });
+
+          restMiner();
+        } catch (error) {
+          console.log("error");
+        }
+
+        break;
+      default:
+        console.log("⚠️ Unknown command:", data.content);
+        break;
+    }
+  });
+});
 
 // api report
 const handleReport = async (payload) => {

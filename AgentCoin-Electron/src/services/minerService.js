@@ -13,6 +13,17 @@ const reportMinerStatus = async (minerData) => {
   }
 };
 
+async function getMinerConfig(deviceID) {
+  try {
+    const res = await axios.get(`${API_URL}/miners/config/${deviceID}`);
+    return res.data;
+  } catch (err) {
+    console.error("❌ Error fetching miner config:", err.message);
+    throw err;
+  }
+}
+
 module.exports = {
   reportMinerStatus,
+  getMinerConfig,
 };

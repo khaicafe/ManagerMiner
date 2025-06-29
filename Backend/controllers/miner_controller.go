@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"backend/models"
+	"backend/utils"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -29,16 +31,79 @@ func GetAllMiners(c *gin.Context) {
 		return
 	}
 
-	// Lọc thêm trạng thái online nếu muốn
-	// for i := range miners {
-	// 	if time.Since(miners[i].ReportedAt) < 90*time.Second {
-	// 		miners[i].Status = "online"
-	// 	} else {
-	// 		miners[i].Status = "offline"
-	// 	}
-	// }
-
 	c.JSON(http.StatusOK, miners)
+}
+
+func UpdateMinersList(c *gin.Context) {
+	var payload []struct {
+		ID             uint   `json:"id"`
+		PoolURL        string `json:"pool_url"`
+		PoolPort       int    `json:"pool_port"`
+		WalletAddress  string `json:"wallet_address"`
+		MaxThreadsHint int    `json:"max_threads_hint"`
+	}
+
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	tx := models.DB.Begin()
+
+	var updatedDeviceIDs []string
+
+	for _, minerData := range payload {
+		var miner models.MinerStatus
+		err := tx.First(&miner, minerData.ID).Error
+		if err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": fmt.Sprintf("Miner ID %d not found", minerData.ID),
+			})
+			return
+		}
+
+		// Update 4 field gốc
+		miner.PoolURL = minerData.PoolURL
+		miner.PoolPort = minerData.PoolPort
+		miner.WalletAddress = minerData.WalletAddress
+		miner.MaxThreadsHint = minerData.MaxThreadsHint
+
+		// Ghi đè field config từ client gửi lên
+		miner.PoolURLConfig = minerData.PoolURL
+		miner.PoolPortConfig = minerData.PoolPort
+		miner.WalletAddressConfig = minerData.WalletAddress
+		miner.MaxThreadsHintConfig = minerData.MaxThreadsHint
+
+		if err := tx.Save(&miner).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Thu thập deviceID (không trùng)
+		if miner.DeviceID != "" {
+			updatedDeviceIDs = append(updatedDeviceIDs, miner.DeviceID)
+		}
+	}
+
+	tx.Commit()
+
+	// Loại bỏ deviceID trùng lặp
+	uniqueDeviceIDs := make(map[string]bool)
+	var userIDs []string
+	for _, id := range updatedDeviceIDs {
+		if !uniqueDeviceIDs[id] {
+			uniqueDeviceIDs[id] = true
+			userIDs = append(userIDs, id)
+		}
+	}
+
+	if len(userIDs) > 0 {
+		utils.NotifyNewToUsers(userIDs, "update_config")
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Updated miners successfully"})
 }
 
 type ConfigUpdateRequest struct {

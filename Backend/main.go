@@ -32,6 +32,9 @@ func init() {
 	DB.AutoMigrate(
 		&models.User{},
 		&models.MinerStatus{},
+		&models.Pool{},
+		&models.Coin{},
+		&models.Wallet{},
 	)
 
 	models.DB = DB

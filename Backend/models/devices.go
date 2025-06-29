@@ -22,4 +22,16 @@ type MinerStatus struct {
 	ReportedAt      time.Time `json:"reported_at"`
 	Status          bool      `json:"status"`
 	LastAcceptedLog string    `json:"last_log"`
+	IsMining        string    `json:"is_mining"` // ✅ mới thêm
+	// Client gửi lên
+	PoolURL        string `json:"pool_url"`
+	PoolPort       int    `json:"pool_port"`
+	WalletAddress  string `json:"wallet_address"`
+	MaxThreadsHint int    `json:"max_threads_hint"`
+
+	// Config dùng thực tế
+	PoolURLConfig        string `json:"pool_url_config"`
+	PoolPortConfig       int    `json:"pool_port_config"`
+	WalletAddressConfig  string `json:"wallet_address_config"`
+	MaxThreadsHintConfig int    `json:"max_threads_hint_config"`
 }

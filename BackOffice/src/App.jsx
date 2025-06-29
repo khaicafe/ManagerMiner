@@ -13,6 +13,9 @@ import PrivateRoute from "./screens/Auth/PrivateRoute";
 import Layout from "./screens/Auth/Layout";
 import Dashboard from "./screens/Dashboard";
 import DeviceScreen from "./screens/DeviceScreen";
+import CoinListScreen from "./screens/CoinList";
+import PoolListScreen from "./screens/PoolList";
+import WalletListScreen from "./screens/WalletList";
 import Login from "./screens/Login";
 
 import theme from "./theme/theme";
@@ -27,6 +30,11 @@ const App = () => {
           <Route element={<Layout />}>
             <Route element={<PrivateRoute roles={["admin"]} />}>
               <Route path="/deviceScreen" element={<DeviceScreen />} />
+
+              {/* <Route path="/coinList" element={<CoinListScreen />} /> */}
+              <Route path="/poolList" element={<PoolListScreen />} />
+              <Route path="/walletList" element={<WalletListScreen />} />
+
               {/* <Route path="/settings" element={<SettingScreen />} /> */}
             </Route>
 
