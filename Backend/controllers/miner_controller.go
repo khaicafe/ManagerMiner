@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,13 +30,13 @@ func GetAllMiners(c *gin.Context) {
 	}
 
 	// Lọc thêm trạng thái online nếu muốn
-	for i := range miners {
-		if time.Since(miners[i].ReportedAt) < 90*time.Second {
-			miners[i].Status = "online"
-		} else {
-			miners[i].Status = "offline"
-		}
-	}
+	// for i := range miners {
+	// 	if time.Since(miners[i].ReportedAt) < 90*time.Second {
+	// 		miners[i].Status = "online"
+	// 	} else {
+	// 		miners[i].Status = "offline"
+	// 	}
+	// }
 
 	c.JSON(http.StatusOK, miners)
 }

@@ -17,12 +17,13 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 const routes = [
   { type: "divider" },
   { path: "/user-management", label: "User Management", icon: <PeopleIcon /> },
+  { path: "/deviceScreen", label: "List Device", icon: <PeopleIcon /> },
+
   {
     path: "/settings",
     label: "Settings",
     icon: <PeopleIcon />,
   },
-  { path: "/deviceScreen", label: "List Device", icon: <PeopleIcon /> },
 ];
 
 export default routes;

@@ -3,8 +3,12 @@ package main
 import (
 	"backend/models"
 	"backend/routes"
+	"backend/utils"
 	"log"
+	"os"
 
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -38,8 +42,33 @@ func init() {
 }
 
 func main() {
+	env := os.Getenv("ENV")
+	if "" == env {
+		env = "dev"
+	}
+	err := godotenv.Load(".env." + env)
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	r := routes.SetupRouter()
+	// Khởi tạo server Socket.IO từ utils
+	socketServer, err := utils.InitSocketServer()
+	if err != nil {
+		log.Fatal("Socket.IO initialization failed:", err)
+	}
+	WEBSOCKET_PATH := os.Getenv("WEBSOCKET_PATH")
+	// Đăng ký http.Handler của socketServer vào Gin
+	r.GET(WEBSOCKET_PATH+"*any", gin.WrapH(socketServer))
+	r.POST(WEBSOCKET_PATH+"*any", gin.WrapH(socketServer))
+
+	// Chạy server Socket.IO trên một goroutine riêng
+	go func() {
+		if err := socketServer.Serve(); err != nil {
+			log.Fatalf("SocketIO listen error: %s\n", err)
+		}
+	}()
+	defer socketServer.Close()
 
 	r.Run(":8080")
 }

@@ -55,8 +55,6 @@ func SetupRouter() *gin.Engine {
 		api.POST("/auth/login", controllers.Login)
 		api.POST("/auth/reset-password", controllers.ResetPassword)
 
-		// api.GET("/device/on", controllers.TurnOn)
-		// api.GET("/device/off", controllers.TurnOff)
 		r.POST("/api/report", controllers.ReportMinerStatus)
 		r.GET("/api/miners", controllers.GetAllMiners)
 

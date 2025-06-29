@@ -13,9 +13,9 @@ func ReportMinerStatus(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	input.Status = true
 	var existing models.MinerStatus
-	if err := models.DB.Where("name = ? AND ip_address = ?", input.Name, input.IPAddress).First(&existing).Error; err != nil {
+	if err := models.DB.Where("device_id = ? ", input.DeviceID).First(&existing).Error; err != nil {
 		// ❌ Không tồn tại -> tạo mới
 		if err := models.DB.Create(&input).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot create"})

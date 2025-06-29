@@ -1,5 +1,6 @@
 // main.js (Main Process)
 const { app, BrowserWindow, ipcMain } = require("electron");
+const socketModule = require("./src/services/socket");
 const path = require("path");
 const { spawn } = require("child_process");
 const { exec } = require("child_process");
@@ -9,6 +10,8 @@ const configPath = path.join(__dirname, "miner.json");
 const minerConfigPath = path.join(__dirname, "miner.json");
 const xmrigConfigPath = path.join(__dirname, "xmrig", "config.json");
 const logPath = path.join(__dirname, "xmrig", "xmrig.log");
+
+const { reportMinerStatus } = require("./src/services/minerService");
 
 let mainWindow;
 let minerProcess = null;
@@ -296,9 +299,9 @@ async function getMinerInfo() {
   const cpuUsage = await getCPUUsagePercent();
   const { timestamp, hashrate, threads } = parseHashrateFromLog();
   const deviceID = getDeviceUUID();
-  // console.log("timestamp", timestamp);
+  console.log("timestamp", timestamp);
 
-  return {
+  const payload = {
     deviceID,
     name: minerName || "YourMinerName",
     ip: localIP,
@@ -311,6 +314,8 @@ async function getMinerInfo() {
     cpu_model: cpuModel,
     cpu_usage: cpuUsage,
   };
+  handleReport(payload);
+  return payload;
 }
 
 let retryTimer = null;
@@ -586,3 +591,28 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+// đăng kí socket
+socketModule.initSocket(() => {
+  console.log("Socket connected in main process");
+
+  // Ví dụ gửi thông báo lên server
+  socketModule.sendNotification({
+    message: "Hello from Electron!",
+  });
+});
+
+// Lúc cần disconnect:
+setTimeout(() => {
+  socketModule.closeSocket();
+}, 30000);
+
+// api report
+const handleReport = async (payload) => {
+  try {
+    const response = await reportMinerStatus(payload);
+    console.log("Report response:", response);
+  } catch (error) {
+    console.error("Failed to report miner status", error);
+  }
+};

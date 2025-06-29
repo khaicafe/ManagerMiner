@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./screens/Auth/PrivateRoute";
 import Layout from "./screens/Auth/Layout";
 import Dashboard from "./screens/Dashboard";
+import DeviceScreen from "./screens/DeviceScreen";
 import Login from "./screens/Login";
 
 import theme from "./theme/theme";
@@ -25,7 +26,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route element={<Layout />}>
             <Route element={<PrivateRoute roles={["admin"]} />}>
-              {/* <Route path="/deviceScreen" element={<DeviceScreen />} /> */}
+              <Route path="/deviceScreen" element={<DeviceScreen />} />
               {/* <Route path="/settings" element={<SettingScreen />} /> */}
             </Route>
 
