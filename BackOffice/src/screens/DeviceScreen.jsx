@@ -212,12 +212,12 @@ const MinersScreen = () => {
     { field: "hashrate", headerName: "Hashrate", width: 130 },
     { field: "max_threads_hint", headerName: "max_threads_hint", width: 100 },
     { field: "threads", headerName: "Threads", width: 100 },
+    { field: "cpu_usage", headerName: "CPU Usage (%)", width: 80 },
     { field: "temperature", headerName: "Temp (°C)", width: 120 },
     { field: "uptime", headerName: "Uptime (s)", width: 130 },
     { field: "platform", headerName: "Platform", width: 130 },
     { field: "last_log", headerName: "Last Log", width: 200 },
     { field: "cpu_model", headerName: "CPU Model", width: 180 },
-    { field: "cpu_usage", headerName: "CPU Usage (%)", width: 150 },
   ];
 
   return (

@@ -315,7 +315,7 @@ async function getMinerInfo() {
   const port = parseInt(portStr, 10);
   const max_threads_hint = minerConfig.getMaxThreadsHint();
 
-  console.log("timestamp", pool, wallet);
+  // console.log("timestamp", pool, wallet);
 
   const payload = {
     deviceID,
@@ -525,10 +525,6 @@ ipcMain.handle("startMiner", (event, showConsole) => {
   return startMiner(event, showConsole);
 });
 
-// ipcMain.on("start-miner", () => {
-//   startMiner();
-// });
-
 ipcMain.on("stop-miner", () => {
   stopMiner();
 });
@@ -590,7 +586,7 @@ ipcMain.handle("get-max-threads-hint", () => {
   const xmrigPath = path.join(__dirname, "xmrig", "config.json");
   const raw = fs.readFileSync(xmrigPath, "utf-8");
   const config = JSON.parse(raw);
-  return config.cpu?.["max-threads-hint"] ?? 50;
+  return config.cpu?.["max-threads-hint"] ?? 0;
 });
 
 // IPC handler: save max-threads-hint
@@ -645,6 +641,10 @@ socketModule.initSocket(() => {
         try {
           const res = await getMinerConfig(deviceID);
           console.log("res", res);
+          mainWindow.webContents.send(
+            "max-threads-hint",
+            res.max_threads_hint_config
+          );
           minerConfig.setMinerConfig({
             wallet: res.wallet_address_config,
             pool: res.pool_url_config + ":" + res.pool_port_config,

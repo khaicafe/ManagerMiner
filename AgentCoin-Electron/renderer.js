@@ -106,6 +106,15 @@ function saveConfig() {
   alert("Config saved!");
 }
 
+// main js truyền giá trị cho miningSpeed
+window.electronAPI.onMaxThreadsHint((hint) => {
+  // Gán giá trị vào span
+  document.getElementById("miningSpeedValue").textContent = hint;
+
+  // Đồng thời set giá trị vào slider
+  document.getElementById("miningSpeed").value = hint;
+});
+
 // get info about
 window.electronAPI.onAboutInfoLoaded((about) => {
   console.log("🎉 ABOUT INFO:", about);

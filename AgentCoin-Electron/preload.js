@@ -23,4 +23,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getMaxThreadsHint: () => ipcRenderer.invoke("get-max-threads-hint"),
   saveMaxThreadsHint: (hint) =>
     ipcRenderer.invoke("save-max-threads-hint", hint),
+
+  onMaxThreadsHint: (callback) =>
+    ipcRenderer.on("max-threads-hint", (e, hint) => {
+      callback(hint);
+    }),
 });
