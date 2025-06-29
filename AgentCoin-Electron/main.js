@@ -14,6 +14,7 @@ const logPath = path.join(__dirname, "xmrig", "xmrig.log");
 const {
   reportMinerStatus,
   getMinerConfig,
+  updateMaxHint,
 } = require("./src/services/minerService");
 const minerConfig = require("./src/services/minerConfig.js");
 
@@ -419,8 +420,8 @@ function parseAboutBlock(log) {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 1600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
@@ -590,7 +591,7 @@ ipcMain.handle("get-max-threads-hint", () => {
 });
 
 // IPC handler: save max-threads-hint
-ipcMain.handle("save-max-threads-hint", (event, hint) => {
+ipcMain.handle("save-max-threads-hint", async (event, hint) => {
   const xmrigPath = path.join(__dirname, "xmrig", "config.json");
   const raw = fs.readFileSync(xmrigPath, "utf-8");
   const config = JSON.parse(raw);
@@ -601,6 +602,19 @@ ipcMain.handle("save-max-threads-hint", (event, hint) => {
   config.cpu["max-threads-hint"] = hint;
 
   fs.writeFileSync(xmrigPath, JSON.stringify(config, null, 2), "utf-8");
+
+  const deviceID = getDeviceUUID();
+  const payload = {
+    deviceID: deviceID,
+    max_threads_hint: hint,
+  };
+  console.log("res", payload);
+
+  try {
+    const res = await updateMaxHint(payload);
+  } catch (error) {
+    console.log("check post", error);
+  }
 
   restMiner();
 });

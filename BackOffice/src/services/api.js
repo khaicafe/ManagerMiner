@@ -30,6 +30,9 @@ export const updateCoinFull = (id, data) =>
 export const deleteCoinFull = (coinId) =>
   axios.delete(BASE_URL + `/coins/${coinId}/full`);
 
+// hashvault
+export const hashvault = (data) => axios.post(BASE_URL + "/hashvault", data);
+
 /////////
 export const getCoins = () => axios.get(`${BASE_URL}/coins`);
 export const getCoin = (id) => axios.get(`${BASE_URL}/coins/${id}`);

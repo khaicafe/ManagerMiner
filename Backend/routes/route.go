@@ -62,6 +62,10 @@ func SetupRouter() *gin.Engine {
 		api.GET("/miners/config/:deviceID", controllers.GetMinerConfig)
 		api.POST("miners/start", controllers.StartMining)
 		api.POST("miners/stop", controllers.StopMining)
+		api.POST("/miners/update-maxhint", controllers.UpdateMaxHint)
+
+		// craw web
+		api.POST("/hashvault", controllers.GetHashVaultBalance)
 
 		//
 		api.GET("/coins-all", controllers.GetAllCoins)

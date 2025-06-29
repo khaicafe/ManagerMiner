@@ -23,7 +23,18 @@ async function getMinerConfig(deviceID) {
   }
 }
 
+async function updateMaxHint(data) {
+  try {
+    const res = await axios.post(API_URL + "/miners/update-maxhint", data);
+    return res.data;
+  } catch (error) {
+    console.error("❌ Error fetching miner config:", err.message);
+    throw err;
+  }
+}
+
 module.exports = {
   reportMinerStatus,
   getMinerConfig,
+  updateMaxHint,
 };

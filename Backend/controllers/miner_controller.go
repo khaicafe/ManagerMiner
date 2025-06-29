@@ -151,6 +151,45 @@ func StopMining(c *gin.Context) {
 	}
 }
 
+type UpdateMaxHintRequest struct {
+	DeviceID       string `json:"deviceID"`
+	MaxThreadsHint int    `json:"max_threads_hint"`
+}
+
+func UpdateMaxHint(c *gin.Context) {
+	var req UpdateMaxHintRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Printf("🔔 Received UpdateMaxHintRequest: %+v\n", req)
+
+	var miner models.MinerStatus
+	if err := models.DB.Where("device_id = ?", req.DeviceID).First(&miner).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "Miner not found",
+		})
+		return
+	}
+
+	miner.MaxThreadsHint = req.MaxThreadsHint
+	miner.MaxThreadsHintConfig = req.MaxThreadsHint
+	if err := models.DB.Save(&miner).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to update max_threads_hint",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Updated max_threads_hint successfully",
+	})
+}
+
 //////////////////////////////
 
 type ConfigUpdateRequest struct {
