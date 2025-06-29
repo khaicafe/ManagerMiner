@@ -106,6 +106,53 @@ func UpdateMinersList(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Updated miners successfully"})
 }
 
+type MinerDevice struct {
+	DeviceID string `json:"deviceID"`
+}
+
+func StartMining(c *gin.Context) {
+	var req []MinerDevice
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var userIDs []string
+	for _, miner := range req {
+		userIDs = append(userIDs, miner.DeviceID)
+		models.DB.Model(&models.MinerStatus{}).
+			Where("device_id = ?", miner.DeviceID).
+			Update("is_mining", "Running")
+	}
+
+	if len(req) > 0 {
+		utils.NotifyNewToUsers(userIDs, "start_miner")
+	}
+}
+
+func StopMining(c *gin.Context) {
+	var req []MinerDevice
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var userIDs []string
+	for _, miner := range req {
+		userIDs = append(userIDs, miner.DeviceID)
+		models.DB.Model(&models.MinerStatus{}).
+			Where("device_id = ?", miner.DeviceID).
+			Update("is_mining", "Stopped")
+	}
+
+	if len(req) > 0 {
+		utils.NotifyNewToUsers(userIDs, "stop_miner")
+	}
+}
+
+//////////////////////////////
+
 type ConfigUpdateRequest struct {
 	RXThreads  []int `json:"rx_threads"`
 	Priority   int   `json:"priority"`

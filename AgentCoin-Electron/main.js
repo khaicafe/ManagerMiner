@@ -319,6 +319,7 @@ async function getMinerInfo() {
 
   const payload = {
     deviceID,
+    status: true,
     name: minerName || "YourMinerName",
     ip: localIP,
     hashrate: hashrate,
@@ -629,12 +630,13 @@ socketModule.initSocket(() => {
       case "start_miner":
         // code chạy miner
         console.log("⚡️ Server muốn start miner:", data);
+        startMiner();
         break;
 
       case "stop_miner":
         // code stop miner
-        console.log("⚡️ Server muốn start miner:", data);
-        // stopMiner()
+        console.log("⚡️ Server muốn stop miner:", data);
+        stopMiner();
         break;
       case "update_config":
         console.log("⚡️ Server muốn set_miner_config:", data);

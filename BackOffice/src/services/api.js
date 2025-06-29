@@ -15,6 +15,11 @@ export const updateMiner = (payload) => {
   return axios.post(`${BASE_URL}/miners/update-list`, payload);
 };
 
+export const startMining = (data) =>
+  axios.post(BASE_URL + "/miners/start", data);
+
+export const stopMining = (data) => axios.post(BASE_URL + "/miners/stop", data);
+
 // COIN
 export const createCoinFull = (data) =>
   axios.post(BASE_URL + "/coins/full", data);

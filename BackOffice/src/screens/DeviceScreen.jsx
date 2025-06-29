@@ -4,6 +4,8 @@ import {
   getPools,
   getWallets,
   updateMiner,
+  startMining,
+  stopMining,
 } from "../services/api";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -108,7 +110,43 @@ const MinersScreen = () => {
     setSelectedPool("");
     setSelectedWallet("");
     setMaxThreadsHint(50);
-    setSelectedIds([]);
+    // setSelectedIds([]);
+  };
+
+  const handleStartMining = async () => {
+    try {
+      const selectedMiners = miners.filter((m) => selectedIds.includes(m.id));
+      const payload = selectedMiners.map((m) => ({
+        deviceID: m.deviceID,
+      }));
+
+      console.log("🚀 Starting mining for miners:", payload);
+
+      await startMining(payload);
+
+      refreshMiners();
+      // setSelectedIds([]);
+    } catch (error) {
+      console.error("Error starting mining:", error);
+    }
+  };
+
+  const handleStopMining = async () => {
+    try {
+      const selectedMiners = miners.filter((m) => selectedIds.includes(m.id));
+      const payload = selectedMiners.map((m) => ({
+        deviceID: m.deviceID,
+      }));
+
+      console.log("🛑 Stopping mining for miners:", payload);
+
+      await stopMining(payload);
+
+      refreshMiners();
+      // setSelectedIds([]);
+    } catch (error) {
+      console.error("Error stopping mining:", error);
+    }
   };
 
   const deviceCounts = miners.reduce((acc, miner) => {
@@ -137,6 +175,7 @@ const MinersScreen = () => {
       width: 150,
       renderCell: (params) => {
         const status = params.row.status;
+        console.log("status", params);
         return (
           <span
             style={{
@@ -168,6 +207,7 @@ const MinersScreen = () => {
       },
     },
     { field: "name", headerName: "Name", width: 150 },
+    { field: "wallet_address", headerName: "wallet_address", width: 150 },
     { field: "ip", headerName: "IP", width: 150 },
     { field: "hashrate", headerName: "Hashrate", width: 130 },
     { field: "threads", headerName: "Threads", width: 100 },
@@ -192,6 +232,22 @@ const MinersScreen = () => {
           onClick={openEditModal}
         >
           Edit Selected
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={selectedIds.length === 0}
+          onClick={handleStartMining}
+        >
+          Start Mining
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          disabled={selectedIds.length === 0}
+          onClick={handleStopMining}
+        >
+          Stop Mining
         </Button>
       </Stack>
 
