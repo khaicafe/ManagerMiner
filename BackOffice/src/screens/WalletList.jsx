@@ -4,6 +4,7 @@ import {
   createWallet,
   updateWallet,
   deleteWallet,
+  fetchHashVault,
 } from "../services/api";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Typography, Stack } from "@mui/material";
@@ -73,29 +74,20 @@ const WalletList = () => {
     fetchWalletStats(wallet.address);
   };
 
-  const fetchWalletStats = (address) => {
-    const url = `https://api.hashvault.pro/v3/monero/wallet/${address}/stats?chart=total&inactivityThreshold=10&order=name&period=daily&poolType=false&workers=true`;
-
+  const fetchWalletStats = async (address) => {
     setLoadingStats(true);
     setErrorStats(null);
 
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("data", data);
-        setWalletStats(data.revenue);
-        setLoadingStats(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrorStats(err.message);
-        setLoadingStats(false);
-      });
+    try {
+      const res = await fetchHashVault(address);
+      console.log("data", res.data);
+      setWalletStats(res.data.revenue);
+    } catch (err) {
+      console.error(err);
+      setErrorStats(err.message);
+    } finally {
+      setLoadingStats(false);
+    }
   };
 
   const columns = [

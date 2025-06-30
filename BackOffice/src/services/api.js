@@ -20,6 +20,10 @@ export const startMining = (data) =>
 
 export const stopMining = (data) => axios.post(BASE_URL + "/miners/stop", data);
 
+export const fetchHashVault = (address) => {
+  return axios.get(`${BASE_URL}/wallet/${address}`);
+};
+
 // COIN
 export const createCoinFull = (data) =>
   axios.post(BASE_URL + "/coins/full", data);

@@ -72,6 +72,8 @@ func SetupRouter() *gin.Engine {
 			})
 		})
 
+		api.GET("/wallet/:address", controllers.FetchHashvault)
+
 		//
 		api.GET("/coins-all", controllers.GetAllCoins)
 		api.DELETE("/coins/:id/full", controllers.DeleteCoinFull)

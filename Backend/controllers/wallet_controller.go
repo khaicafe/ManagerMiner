@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"io"
 	"net/http"
 
 	"backend/models"
@@ -65,4 +67,22 @@ func DeleteWallet(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Deleted"})
+}
+
+func FetchHashvault(c *gin.Context) {
+	address := c.Param("address")
+	url := fmt.Sprintf(
+		"https://api.hashvault.pro/v3/monero/wallet/%s/stats?chart=total&inactivityThreshold=10&order=name&period=daily&poolType=false&workers=true",
+		address,
+	)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+	c.Data(resp.StatusCode, "application/json", body)
 }
