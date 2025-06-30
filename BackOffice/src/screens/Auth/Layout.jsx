@@ -20,6 +20,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import StraightenIcon from "@mui/icons-material/Straighten";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import TuneIcon from "@mui/icons-material/Tune";
+import Stack from "@mui/material/Stack";
 import {
   AppBar,
   Box,
@@ -42,10 +43,22 @@ import RightDropdownMenu from "./RightDropdownMenu";
 import config from "../../config";
 import permissions from "../../utils/permissions"; // Import danh sách quyền
 import routes from "../../utils/routes"; // Import danh sách route
+import { getlocalIp } from "../../services/api";
 
 const API_URL = config.apiBaseUrl;
 
 const drawerWidth = 240;
+
+const getWanIP = async () => {
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    return data.ip;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -94,6 +107,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const Layout = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [localIP, setLocalIP] = React.useState(null);
+  const [wanIP, setWanIP] = React.useState(null);
+
+  React.useEffect(() => {
+    getlocalIp().then((ip) => {
+      console.log("local", ip.data.local_ip);
+
+      setLocalIP(ip.data.local_ip);
+    });
+    getWanIP().then((ip) => setWanIP(ip));
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,6 +153,21 @@ const Layout = () => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard {API_URL}
           </Typography>
+          <Divider sx={{ my: 1 }} />
+
+          <Stack direction="column" spacing={1}>
+            {localIP && (
+              <Typography variant="body2" sx={{ fontSize: "0.9rem" }}>
+                🏠 <strong>Local IP:</strong> {localIP}
+              </Typography>
+            )}
+            {wanIP && (
+              <Typography variant="body2" sx={{ fontSize: "0.9rem" }}>
+                🌐 <strong>WAN IP:</strong> {wanIP}
+              </Typography>
+            )}
+          </Stack>
+
           <RightDropdownMenu />
         </Toolbar>
       </AppBarStyled>

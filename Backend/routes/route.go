@@ -64,8 +64,13 @@ func SetupRouter() *gin.Engine {
 		api.POST("miners/stop", controllers.StopMining)
 		api.POST("/miners/update-maxhint", controllers.UpdateMaxHint)
 
-		// craw web
-		api.POST("/hashvault", controllers.GetHashVaultBalance)
+		//
+		api.GET("/local-ip", func(c *gin.Context) {
+			localIP := controllers.GetLocalIP()
+			c.JSON(http.StatusOK, gin.H{
+				"local_ip": localIP,
+			})
+		})
 
 		//
 		api.GET("/coins-all", controllers.GetAllCoins)
@@ -97,15 +102,15 @@ func SetupRouter() *gin.Engine {
 	}
 
 	// Serve frontend build (React)
-	r.Static("/assets", filepath.Join("..", "frontend", "dist", "assets"))
-	r.StaticFile("/vite.svg", filepath.Join("..", "frontend", "dist", "vite.svg"))
-	r.StaticFile("/", filepath.Join("..", "frontend", "dist", "index.html"))
+	r.Static("/assets", filepath.Join("..", "BackOffice", "dist", "assets"))
+	r.StaticFile("/vite.svg", filepath.Join("..", "BackOffice", "dist", "vite.svg"))
+	r.StaticFile("/", filepath.Join("..", "BackOffice", "dist", "index.html"))
 
 	// Fallback to index.html for SPA routes
 	r.NoRoute(func(c *gin.Context) {
 		uri := c.Request.RequestURI
 		if filepath.Ext(uri) == "" {
-			c.File(filepath.Join("..", "frontend", "dist", "index.html"))
+			c.File(filepath.Join("dist", "index.html"))
 		} else {
 			c.Status(http.StatusNotFound)
 		}

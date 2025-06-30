@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "../config"; // Import URL từ file config
-const API_URL = config.apiBaseUrl + "/miners";
 const BASE_URL = config.apiBaseUrl;
+const API_URL = config.apiBaseUrl + "/miners";
 
 export const getAllMiners = () => {
   return axios.get(API_URL);
@@ -31,7 +31,7 @@ export const deleteCoinFull = (coinId) =>
   axios.delete(BASE_URL + `/coins/${coinId}/full`);
 
 // hashvault
-export const hashvault = (data) => axios.post(BASE_URL + "/hashvault", data);
+export const getlocalIp = (data) => axios.get(BASE_URL + "/local-ip");
 
 /////////
 export const getCoins = () => axios.get(`${BASE_URL}/coins`);

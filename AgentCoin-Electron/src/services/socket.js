@@ -3,12 +3,12 @@ const config = require("../config/index.js"); // adjust path as needed
 const os = require("os");
 const { execSync } = require("child_process");
 
-// const SERVER_URL = config.WEBSOCKET_URL;
-// const PATH = config.WEBSOCKET_PATH;
+const SERVER_URL = config.WEBSOCKET_URL;
+const PATH = config.WEBSOCKET_PATH;
 
-const SERVER_URL = "http://localhost:8080";
-const PATH = "/api/socket-io";
-console.log("path socket", config);
+// const SERVER_URL = "http://localhost:8080";
+// const PATH = "/api/socket-io";
+// console.log("path socket", config);
 
 let socket = null;
 

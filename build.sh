@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "📦 Building frontend..."
-cd frontend && npm run build && cd ..
+cd BackOffice && npm run build && cd ..
 
 echo "🔨 Building backend..."
 cd backend && go build -o app && cd ..
@@ -20,8 +20,14 @@ if [ -f backend/db/data.db ]; then
   echo "✅ Copied database file: data.db"
 fi
 
+# Copy env file if exists
+if [ -f backend/.env.dev ]; then
+  cp backend/.env.dev build/.env.dev
+  echo "✅ Copied env file: .env.dev"
+fi
+
 # Copy frontend build files
-cp -r frontend/dist build/
+cp -r BackOffice/dist build/
 
 echo "🚀 Done! Run ./build/app to start full web + API server."
 

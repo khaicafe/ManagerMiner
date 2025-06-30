@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -41,17 +42,22 @@ func init() {
 	// Seed data if necessary
 	models.SeedDefaultData(DB)
 
-	log.Println("🔐 Lấy token từ Tuya...")
 }
 
 func main() {
 	env := os.Getenv("ENV")
-	if "" == env {
+	if env == "" {
 		env = "dev"
 	}
+
 	err := godotenv.Load(".env." + env)
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Printf("⚠️ .env.%s not found. Trying fallback .env\n", env)
+
+		err = godotenv.Load(".env")
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	r := routes.SetupRouter()
@@ -74,4 +80,6 @@ func main() {
 	defer socketServer.Close()
 
 	r.Run(":8080")
+	// r.Run("192.167.1.9:8080")
+
 }

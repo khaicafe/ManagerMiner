@@ -6,7 +6,6 @@ import {
   updateMiner,
   startMining,
   stopMining,
-  hashvault,
 } from "../services/api";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -25,6 +24,11 @@ import {
   Slider,
 } from "@mui/material";
 import isEqual from "lodash/isEqual";
+import { Chip, Tooltip } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import MiningIcon from "@mui/icons-material/Whatshot";
+import StopIcon from "@mui/icons-material/Stop";
 
 const MinersScreen = () => {
   const [miners, setMiners] = useState([]);
@@ -155,7 +159,7 @@ const MinersScreen = () => {
     return acc;
   }, {});
 
-  const columns = [
+  const columnsbk = [
     {
       field: "deviceID",
       headerName: "Device ID",
@@ -219,6 +223,201 @@ const MinersScreen = () => {
     { field: "platform", headerName: "Platform", width: 130 },
     { field: "last_log", headerName: "Last Log", width: 200 },
     { field: "cpu_model", headerName: "CPU Model", width: 180 },
+  ];
+
+  const columns = [
+    {
+      field: "deviceID",
+      headerName: "Device ID",
+      width: 200,
+      renderCell: (params) => {
+        const duplicate = deviceCounts[params.row.deviceID] > 1;
+        return (
+          <Tooltip
+            title={duplicate ? "Duplicated device ID!" : params.row.deviceID}
+          >
+            <span
+              style={{
+                color: duplicate ? "orange" : "inherit",
+                fontWeight: duplicate ? "bold" : "normal",
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              {duplicate && "⚠️"}
+              {params.row.deviceID}
+            </span>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 150,
+      renderCell: (params) => {
+        const status = params.row.status;
+        return (
+          <Chip
+            icon={
+              status ? (
+                <CheckCircleIcon color="success" />
+              ) : (
+                <CancelIcon color="error" />
+              )
+            }
+            label={status ? "Online" : "Offline"}
+            color={status ? "success" : "error"}
+            variant="outlined"
+            size="small"
+          />
+        );
+      },
+    },
+    {
+      field: "is_mining",
+      headerName: "Mining",
+      width: 150,
+      renderCell: (params) => {
+        const mining = params.row.is_mining === "Running";
+        return (
+          <Chip
+            icon={mining ? <MiningIcon /> : <StopIcon />}
+            label={params.row.is_mining}
+            color={mining ? "success" : "default"}
+            variant="outlined"
+            size="small"
+          />
+        );
+      },
+    },
+    {
+      field: "name",
+      headerName: "Worker",
+      width: 150,
+      renderCell: (params) => (
+        <Tooltip title={params.row.name || ""}>
+          <span>{params.row.name}</span>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "wallet_address",
+      headerName: "Wallet Address",
+      width: 250,
+      renderCell: (params) => (
+        <Tooltip title={params.row.wallet_address || ""}>
+          <span>{params.row.wallet_address?.slice(0, 10)}...</span>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "ip",
+      headerName: "IP",
+      width: 150,
+      renderCell: (params) => (
+        <Chip label={params.row.ip} variant="outlined" size="small" />
+      ),
+    },
+    {
+      field: "hashrate",
+      headerName: "Hashrate",
+      width: 130,
+      align: "right",
+      renderCell: (params) => (
+        <span>{Number(params.row.hashrate).toFixed(2)} H/s</span>
+      ),
+    },
+    {
+      field: "max_threads_hint",
+      headerName: "Max Threads",
+      width: 100,
+      align: "center",
+    },
+    {
+      field: "threads",
+      headerName: "Threads",
+      width: 100,
+      align: "center",
+    },
+    {
+      field: "cpu_usage",
+      headerName: "CPU Usage",
+      width: 130,
+      align: "center",
+      renderCell: (params) => (
+        <Chip
+          label={`${params.row.cpu_usage}%`}
+          color={params.row.cpu_usage > 80 ? "error" : "primary"}
+          size="small"
+        />
+      ),
+    },
+    {
+      field: "temperature",
+      headerName: "Temp (°C)",
+      width: 120,
+      align: "center",
+      renderCell: (params) => (
+        <Chip
+          label={`${params.row.temperature}°C`}
+          color={
+            params.row.temperature > 75
+              ? "error"
+              : params.row.temperature > 60
+              ? "warning"
+              : "success"
+          }
+          size="small"
+        />
+      ),
+    },
+    {
+      field: "uptime",
+      headerName: "Uptime (s)",
+      width: 130,
+      align: "center",
+      renderCell: (params) => (
+        <span>{Number(params.row.uptime).toLocaleString()} s</span>
+      ),
+    },
+    {
+      field: "platform",
+      headerName: "Platform",
+      width: 130,
+      renderCell: (params) => (
+        <Chip label={params.row.platform} size="small" variant="outlined" />
+      ),
+    },
+    {
+      field: "last_log",
+      headerName: "Last Log",
+      width: 200,
+      renderCell: (params) => (
+        <Tooltip title={params.row.last_log || ""}>
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {params.row.last_log}
+          </span>
+        </Tooltip>
+      ),
+    },
+    {
+      field: "cpu_model",
+      headerName: "CPU Model",
+      width: 180,
+      renderCell: (params) => (
+        <Tooltip title={params.row.cpu_model || ""}>
+          <span>{params.row.cpu_model}</span>
+        </Tooltip>
+      ),
+    },
   ];
 
   return (
