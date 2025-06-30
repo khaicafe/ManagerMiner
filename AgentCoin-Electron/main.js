@@ -45,9 +45,10 @@ function killXmrigProcesses() {
   if (platform === "win32") {
     // Windows
     cmd = "taskkill /F /IM xmrig.exe";
+    cmd = "taskkill /F /IM xmrigWin.exe";
   } else {
     // macOS hoặc Linux
-    cmd = "pkill -f xmrig";
+    cmd = "pkill -f xmrigMac";
   }
 
   exec(cmd, (error, stdout, stderr) => {
@@ -439,7 +440,17 @@ function startMiner(consoleFlag) {
     return { status: "Running", pid: minerProcess.pid };
   }
 
-  const minerPath = path.join(__dirname, "xmrig", "xmrig");
+  let minerExe;
+
+  if (os.platform() === "win32") {
+    minerExe = "xmrigWin.exe";
+  } else if (os.platform() === "darwin") {
+    minerExe = "xmrigMac";
+  } else {
+    minerExe = "xmrigLinux";
+  }
+  const minerPath = path.join(__dirname, "xmrig", minerExe);
+  // const minerPath = path.join(__dirname, "xmrig", "xmrig");
   const configFile = path.join(__dirname, "miner.json");
 
   const options = {
