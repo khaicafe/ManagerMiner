@@ -69,7 +69,10 @@ function getAppExePath() {
   } else {
     exeName = "app";
   }
-  return path.join(__dirname, "server", exeName);
+
+  const basePath = app.isPackaged ? process.resourcesPath : __dirname;
+
+  return path.join(basePath, "server", exeName);
 }
 
 // Chạy lệnh service (install, uninstall, start, stop, restart, dev)

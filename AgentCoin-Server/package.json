@@ -1,5 +1,5 @@
 {
-  "name": "agentcoin-ui",
+  "name": "agentcoin-server",
   "version": "1.0.0",
   "description": "AgentCoin Electron App",
   "author": "KhaiCafe <youremail@example.com>",
@@ -27,8 +27,8 @@
     "asar": true,
     "extraResources": [
       {
-        "from": "xmrig",
-        "to": "xmrig"
+        "from": "server",
+        "to": "server"
       }
     ]
   },
