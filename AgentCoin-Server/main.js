@@ -43,7 +43,7 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  tray = new Tray(path.join(__dirname, "icon.ico"));
+  tray = new Tray(path.join(__dirname, "icon.png"));
   const contextMenu = Menu.buildFromTemplate([
     { label: "Show", click: () => win.show() },
     {
@@ -61,7 +61,8 @@ app.whenReady().then(() => {
 // Xử lý các IPC lệnh service
 ipcMain.handle("service-action", async (event, action) => {
   console.log(`[Electron] Running: app.exe ${action}`);
-  const exePath = path.join(__dirname, "server", "app.exe");
+  // const exePath = path.join(__dirname, "server", "app.exe");
+  const exePath = path.join(__dirname, "server", "app");
 
   return new Promise((resolve, reject) => {
     const proc = spawn(exePath, [action]);
