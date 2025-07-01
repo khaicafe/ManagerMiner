@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AgentCoin Miner</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        /* padding: 20px; */
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 6px 12px;
+      }
+      .container {
+        display: flex;
+        gap: 5px;
+        align-items: flex-start;
+      }
+      .left-pane,
+      .center-pane,
+      .right-pane {
+        flex: 1;
+        min-width: 200px;
+        font-size: 11px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      table,
+      td,
+      th {
+        border: 1px solid #999;
+      }
+      td,
+      th {
+        padding: 8px;
+        text-align: left;
+      }
+      pre {
+        background-color: #000;
+        color: #0f0;
+        padding: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- LEFT PANE -->
+      <div class="left-pane">
+        <h2>🪙 AgentCoin Miner</h2>
+        <label>
+          Server IP:
+          <input
+            type="text"
+            id="serverIp"
+            placeholder="Enter Server IP (e.g. 192.168.1.10)"
+          />
+        </label>
+
+        <label>
+          Worker:
+          <input
+            type="text"
+            id="minerName"
+            placeholder="Enter Miner Name (e.g. miner-office-01)"
+          />
+        </label>
+
+        <button onclick="saveConfig()">Save Config</button>
+
+        <label>
+          Mining Speed:
+          <input
+            type="range"
+            id="miningSpeed"
+            min="1"
+            max="100"
+            step="1"
+            value="50"
+          />
+          <span id="miningSpeedValue">50</span>%
+        </label>
+
+        <label>
+          <input type="checkbox" id="consoleToggle" checked />
+          Show miner console
+        </label>
+
+        <div style="margin-top: 20px">
+          <p>Status: <span id="statusText">Stopped</span></p>
+          <button onclick="startMiner()">▶️ Start Miner</button>
+          <button onclick="stopMiner()">⛔ Stop Miner</button>
+        </div>
+      </div>
+
+      <!-- CENTER PANE -->
+      <div class="center-pane">
+        <h2>Miner Information</h2>
+        <table>
+          <tr>
+            <td>Worker</td>
+            <td id="infoName"></td>
+          </tr>
+          <tr>
+            <td>DeviceID</td>
+            <td id="deviceID"></td>
+          </tr>
+          <tr>
+            <td>IP Address</td>
+            <td id="infoIP"></td>
+          </tr>
+          <tr>
+            <td>Hashrate</td>
+            <td id="infoHashrate"></td>
+          </tr>
+          <tr>
+            <td>Threads</td>
+            <td id="threads"></td>
+          </tr>
+          <tr>
+            <td>Temperature</td>
+            <td id="infoTemp"></td>
+          </tr>
+          <tr>
+            <td>Uptime</td>
+            <td id="infoUptime"></td>
+          </tr>
+          <tr>
+            <td>Platform</td>
+            <td id="infoPlatform"></td>
+          </tr>
+          <tr>
+            <td>Last Log</td>
+            <td id="infoLog"></td>
+          </tr>
+          <tr>
+            <td>CPU Model</td>
+            <td id="infoCPU"></td>
+          </tr>
+          <tr>
+            <td>CPU Usage</td>
+            <td id="infoCPUUsage"></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- RIGHT PANE -->
+      <div class="right-pane">
+        <h2>ABOUT</h2>
+        <table
+          id="aboutTable"
+          border="1"
+          cellspacing="0"
+          cellpadding="5"
+        ></table>
+      </div>
+    </div>
+    <pre
+      id="logOutput"
+      style="
+        background-color: #000;
+        color: #fff;
+        height: 250px;
+        overflow: auto;
+        padding: 10px;
+        font-size: 12px;
+        white-space: pre-wrap;
+      "
+    ></pre>
+
+    <script>
+      // require('./renderer')
+      document.write(
+        "<script type='text/javascript' src='renderer.js?v=" +
+          Date.now() +
+          "'><\/script>"
+      );
+    </script>
+  </body>
+</html>
