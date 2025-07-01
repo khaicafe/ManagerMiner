@@ -203,7 +203,7 @@ function getLocalIPAddress() {
   return "unknown";
 }
 
-function getCPUTemperature() {
+async function getCPUTemperature() {
   try {
     if (process.platform === "darwin") {
       const output = execSync("osx-cpu-temp").toString().trim();
@@ -215,7 +215,7 @@ function getCPUTemperature() {
       const match = out.match(/(?:Core|Package).+?\+([\d.]+)/);
       return match ? parseFloat(match[1]) : 0;
     }
-    if (process.platform === "win32") {
+   if (process.platform === "win32") {
       const out = execSync(
         `wmic /namespace:\\\\root\\wmi PATH MSAcpi_ThermalZoneTemperature get CurrentTemperature`
       ).toString();
@@ -317,7 +317,7 @@ async function getMinerInfo() {
   const port = parseInt(portStr, 10);
   const max_threads_hint = minerConfig.getMaxThreadsHint();
 
-  // console.log("timestamp", pool, wallet);
+  console.log("temperature",temperature);
 
   const payload = {
     deviceID,
@@ -326,7 +326,7 @@ async function getMinerInfo() {
     ip: localIP,
     hashrate: hashrate,
     threads,
-    temperature,
+    temperature: 0,
     uptime: timestamp,
     platform: getPlatformInfo(),
     last_log: lastLog,
@@ -508,15 +508,16 @@ function startMiner(consoleFlag) {
 
 function stopMiner() {
   if (minerProcess) {
-    process.kill(-minerProcess.pid);
+    // process.kill(-minerProcess.pid);
+    // kill all
+    killXmrigProcesses();
     console.log("🛑 Miner stopped");
     minerStatus = "Stopped";
     minerProcess = null;
   } else {
     console.log("ℹ️ Miner not running");
   }
-  // kill all
-  killXmrigProcesses();
+  
 }
 
 app.whenReady().then(() => {
@@ -559,7 +560,7 @@ ipcMain.on("save-config", (event, { serverIp, minerName }) => {
   }
 
   // Chỉ update các trường được nhập, giữ nguyên các trường còn lại
-  config.server_url = `http://${serverIp}:8081/api/report`;
+  config.server_url = `http://${serverIp}:8080/api/report`;
   config.miner_name = minerName;
 
   if (serverIp != null) {
@@ -572,7 +573,7 @@ ipcMain.on("save-config", (event, { serverIp, minerName }) => {
     const config = JSON.parse(fs.readFileSync(xmrigConfigPath, "utf8"));
     const wallet = (config.pools?.[0]?.user || "").split(".")[0]; // lấy phần trước nếu có
 
-    config.pools[0].user = `${wallet}.${minerName}`;
+    config.pools[0].pass = `${minerName}`;
     fs.writeFileSync(xmrigConfigPath, JSON.stringify(config, null, 2));
     console.log("🔧 Updated XMRig config with new miner_name.");
   }

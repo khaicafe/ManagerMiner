@@ -35,7 +35,7 @@
     "yield": true,
     "asm": true,
     "argon2-impl": null,
-    "max-threads-hint": 10
+    "max-threads-hint": 11
   },
   "opencl": {
     "enabled": false,
@@ -58,8 +58,8 @@
       "algo": null,
       "coin": null,
       "url": "pool.hashvault.pro:443",
-      "user": "45HFhfydfAzBPrYiY9b4LEh7wDDmn7rE41aHr5rmLcznjnr3cZvNQ7o6wWZSM2oyPAfR5nGznTTsCbkp7oQjEU97AfsjCgQ.khai",
-      "pass": "khai",
+      "user": "45HFhfydfAzBPrYiY9b4LEh7wDDmn7rE41aHr5rmLcznjnr3cZvNQ7o6wWZSM2oyPAfR5nGznTTsCbkp7oQjEU97AfsjCgQ",
+      "pass": "khaitest",
       "rig-id": null,
       "nicehash": false,
       "keepalive": true,

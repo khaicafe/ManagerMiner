@@ -2,8 +2,15 @@ const io = require("socket.io-client");
 const config = require("../config/index.js"); // adjust path as needed
 const os = require("os");
 const { execSync } = require("child_process");
+const minerConfig = require("../../miner.json");
 
-const SERVER_URL = config.WEBSOCKET_URL;
+const SERVER_URL = ()=>{
+  const fullUrl = minerConfig.server_url;
+  const urlObj = new URL(fullUrl);
+  return urlObj.origin
+}
+
+// const SERVER_URL = config.WEBSOCKET_URL;
 const PATH = config.WEBSOCKET_PATH;
 
 // const SERVER_URL = "http://localhost:8080";
@@ -48,9 +55,9 @@ function getDeviceUUID() {
 const USER_ID = getDeviceUUID(); // Thay thế bằng user ID thực tế của bạn
 
 function initSocket(onConnectedCallback) {
-  console.log("socket:", SERVER_URL, "path:", PATH);
+  console.log("socket:", SERVER_URL(), "path:", PATH);
 
-  socket = io(SERVER_URL, {
+  socket = io(SERVER_URL(), {
     transports: ["websocket"],
     path: PATH,
   });
