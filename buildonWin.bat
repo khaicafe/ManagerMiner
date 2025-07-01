@@ -22,18 +22,24 @@ echo 📁 Preparing build folder...
 if exist build (
     echo Xoa thu muc build cu...
     rmdir /s /q build
+    rmdir /s /q AgentCoin-Server/server
 )
 
 :: Tạo thư mục build và build\db
 mkdir build
 mkdir build\db
 
+mkdir AgentCoin-Server\server
+mkdir AgentCoin-Server\server\db
+
 :: Copy backend binary
 copy backend\app.exe build\app.exe >nul
+copy backend\app.exe AgentCoin-Server\server\app.exe >nul
 
 :: Copy database nếu tồn tại
 if exist backend\db\data.db (
     copy backend\db\data.db build\db\data.db >nul
+    copy backend\db\data.db AgentCoin-Server\server\db\data.db >nul
     echo ✅ Copied database file: data.db
 )
 
@@ -45,6 +51,7 @@ if exist backend\.env.dev (
 
 :: Copy frontend build files
 xcopy /s /e /y BackOffice\dist\* build\
+xcopy /s /e /y BackOffice\dist\* AgentCoin-Server\server\
 
 echo 🚀 Done! Transfer the build\ folder to your Windows machine and run app.exe
 

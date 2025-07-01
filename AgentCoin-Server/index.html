@@ -6,30 +6,32 @@
     <style>
       body {
         font-family: sans-serif;
-        margin: 20px;
-        background: #f2f2f2;
+        padding: 20px;
+      }
+      textarea {
+        width: 100%;
+        height: 300px;
+        margin-top: 10px;
+        font-family: monospace;
       }
       button {
         margin-right: 10px;
         margin-bottom: 10px;
       }
-      textarea {
-        width: 100%;
-        height: 400px;
-        font-family: monospace;
-        font-size: 12px;
+      #status {
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <h1>Agent Coin Miner Manager</h1>
-    <div>
-      <button id="install">Install Service</button>
-      <button id="uninstall">Uninstall Service</button>
-      <button id="start">Start Service</button>
-      <button id="stop">Stop Service</button>
-      <button id="dev">Run Dev</button>
-    </div>
+    <h2>Agent Coin Miner</h2>
+    <p>Service Status: <span id="status">Loading...</span></p>
+    <button id="install">Install Service</button>
+    <button id="uninstall">Uninstall Service</button>
+    <button id="start">Start Service</button>
+    <button id="stop">Stop Service</button>
+    <button id="dev">Run Dev</button>
+    <br />
     <textarea id="log" readonly></textarea>
     <script src="renderer.js"></script>
   </body>

@@ -19,12 +19,18 @@ rm -rf build
 mkdir -p build
 mkdir -p build/db
 
+rm -rf AgentCoin-Server/server
+mkdir -p AgentCoin-Server/server
+mkdir -p AgentCoin-Server/server/db
+
 # Copy backend binary
 cp backend/app.exe build/
+cp backend/app.exe AgentCoin-Server/server
 
 # Copy database file if exists
 if [ -f backend/db/data.db ]; then
   cp backend/db/data.db build/db/
+  cp backend/db/data.db AgentCoin-Server/server/db/
   echo "✅ Copied database file: data.db"
 fi
 
@@ -36,5 +42,6 @@ fi
 
 # Copy frontend build files
 cp -r BackOffice/dist build/
+cp -r BackOffice/dist AgentCoin-Server/server
 
 echo "🚀 Done! Transfer the build/ folder to your Windows machine and run app.exe"

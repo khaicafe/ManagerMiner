@@ -5,31 +5,59 @@ window.addEventListener("DOMContentLoaded", () => {
   const btnStart = document.getElementById("start");
   const btnStop = document.getElementById("stop");
   const btnDev = document.getElementById("dev");
+  const statusLabel = document.getElementById("status");
 
   function appendLog(text) {
     logBox.value += text + "\n";
     logBox.scrollTop = logBox.scrollHeight;
   }
 
-  btnInstall.addEventListener("click", () => {
-    window.api.serviceAction("install").then(appendLog);
+  async function refreshServiceStatus() {
+    const status = await window.api.serviceStatus();
+    console.log("Service status:", status);
+
+    statusLabel.textContent = status.running
+      ? "Running"
+      : status.installed
+      ? "Stopped"
+      : "Not Installed";
+
+    btnInstall.disabled = status.installed;
+    btnUninstall.disabled = !status.installed;
+    btnStart.disabled = !status.installed || status.running;
+    btnStop.disabled = !status.installed || !status.running;
+  }
+
+  btnInstall.addEventListener("click", async () => {
+    const output = await window.api.serviceAction("install");
+    appendLog(output);
+    refreshServiceStatus();
   });
 
-  btnUninstall.addEventListener("click", () => {
-    window.api.serviceAction("uninstall").then(appendLog);
+  btnUninstall.addEventListener("click", async () => {
+    const output = await window.api.serviceAction("uninstall");
+    appendLog(output);
+    refreshServiceStatus();
   });
 
-  btnStart.addEventListener("click", () => {
-    window.api.serviceAction("start").then(appendLog);
+  btnStart.addEventListener("click", async () => {
+    const output = await window.api.serviceAction("start");
+    appendLog(output);
+    refreshServiceStatus();
   });
 
-  btnStop.addEventListener("click", () => {
-    window.api.serviceAction("stop").then(appendLog);
+  btnStop.addEventListener("click", async () => {
+    const output = await window.api.serviceAction("stop");
+    appendLog(output);
+    refreshServiceStatus();
   });
 
-  btnDev.addEventListener("click", () => {
-    window.api.runDev().then(appendLog);
+  btnDev.addEventListener("click", async () => {
+    const output = await window.api.runDev();
+    appendLog(output);
   });
 
   window.api.onLog(appendLog);
+
+  refreshServiceStatus();
 });
