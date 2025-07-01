@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
@@ -28,10 +29,23 @@ func (p *program) Start(s service.Service) error {
 func (p *program) run() {
 	fmt.Println("Service is running...")
 
-	DB, err := gorm.Open(sqlite.Open("./db/data.db?_busy_timeout=5000"), &gorm.Config{})
+	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	dbFile := filepath.Join(dir, "db", "data.db")
+
+	// Gắn query string riêng
+	dsn := dbFile + "?_busy_timeout=5000"
+
+	DB, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect to database")
+		log.Fatal("failed to connect database:", err)
 	}
+
+	log.Println("Connected DB OK!", DB)
+
+	// DB, err := gorm.Open(sqlite.Open("./db/data.db?_busy_timeout=5000"), &gorm.Config{})
+	// if err != nil {
+	// 	panic("failed to connect to database")
+	// }
 	err = DB.Exec("PRAGMA journal_mode=WAL;").Error
 	if err != nil {
 		log.Fatalf("failed to enable WAL mode: %v", err)

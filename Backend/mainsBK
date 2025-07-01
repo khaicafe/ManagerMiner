@@ -5,6 +5,8 @@ import (
 	"backend/routes"
 	"backend/utils"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 
@@ -15,12 +17,26 @@ import (
 var DB *gorm.DB
 
 func init() {
-	// os.MkdirAll("db", os.ModePerm) // đảm bảo thư mục "data" tồn tại
-	DB, err := gorm.Open(sqlite.Open("./db/data.db?_busy_timeout=5000"), &gorm.Config{})
-	// DB.LogMode(true)
+	// Lấy path tuyệt đối của thư mục đang chứa executable
+	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	dbFile := filepath.Join(dir, "db", "data.db")
+
+	// Gắn query string riêng
+	dsn := dbFile + "?_busy_timeout=5000"
+
+	DB, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect to database")
+		log.Fatal("failed to connect database:", err)
 	}
+
+	log.Println("Connected DB OK!", DB)
+
+	// os.MkdirAll("db", os.ModePerm) // đảm bảo thư mục "data" tồn tại
+	// DB, err := gorm.Open(sqlite.Open("./db/data.db?_busy_timeout=5000"), &gorm.Config{})
+	// // DB.LogMode(true)
+	// if err != nil {
+	// 	panic("failed to connect to database")
+	// }
 
 	// Thiết lập chế độ WAL (Write-Ahead Logging)
 	err = DB.Exec("PRAGMA journal_mode=WAL;").Error
