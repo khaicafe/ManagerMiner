@@ -1,10 +1,13 @@
 {
   "name": "agentcoin-ui",
   "version": "1.0.0",
+  "description": "AgentCoin Electron App",
+  "author": "KhaiCafe <youremail@example.com>",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build_mac_win": "electron-builder -mw -p always",
+    "build_win": "electron-builder -w -p always",
     "dist_all": "electron-builder -mwl"
   },
   "build": {
@@ -16,21 +19,18 @@
       "perMachine": true
     },
     "win": {
-      "publisherName": "MinerCoin",
       "icon": "./icon.ico",
-      "signingHashAlgorithms": [
-        "sha256"
-      ],
-      "signAndEditExecutable": true,
-      "signDlls": false,
-      "verifyUpdateCodeSignature": false,
-      "certificateFile": "ca.pfx",
-      "certificatePassword": "1"
+      "target": "nsis",
+      "cscLink": "ca.pfx",
+      "cscKeyPassword": "1"
     }
   },
   "dependencies": {
     "axios": "^1.10.0",
-    "electron": "^28.0.0",
     "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^26.0.12"
   }
 }
