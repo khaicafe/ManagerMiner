@@ -1,7 +1,10 @@
 import axios from "axios";
 import config from "../config"; // Import URL từ file config
-const BASE_URL = config.apiBaseUrl;
-const API_URL = config.apiBaseUrl + "/miners";
+// const BASE_URL = config.apiBaseUrl;
+// const API_URL = config.apiBaseUrl
+
+const BASE_URL = window.location.origin + "/api";
+const API_URL = window.location.origin + "/api/miners";
 
 export const getAllMiners = () => {
   return axios.get(API_URL);

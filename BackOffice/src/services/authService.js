@@ -1,7 +1,8 @@
 import axios from "axios";
 import config from "../config";
 
-const API_URL = config.apiBaseUrl + "/auth/";
+const API_URL = window.location.origin + "/api/auth/";
+// const API_URL = config.apiBaseUrl + "/auth/";
 
 const login = (mobileNumber, password) => {
   return axios.post(API_URL + "login", {

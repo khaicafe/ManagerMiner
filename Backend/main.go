@@ -5,10 +5,8 @@ import (
 	"backend/routes"
 	"backend/utils"
 	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -45,28 +43,29 @@ func init() {
 }
 
 func main() {
-	env := os.Getenv("ENV")
-	if env == "" {
-		env = "dev"
-	}
+	// env := os.Getenv("ENV")
+	// if env == "" {
+	// 	env = "dev"
+	// }
 
-	err := godotenv.Load(".env." + env)
-	if err != nil {
-		log.Printf("⚠️ .env.%s not found. Trying fallback .env\n", env)
+	// err := godotenv.Load(".env." + env)
+	// if err != nil {
+	// 	log.Printf("⚠️ .env.%s not found. Trying fallback .env\n", env)
 
-		err = godotenv.Load(".env")
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
+	// 	err = godotenv.Load(".env")
+	// 	if err != nil {
+	// 		log.Fatal("Error loading .env file")
+	// 	}
+	// }
+	// WEBSOCKET_PATH := os.Getenv("WEBSOCKET_PATH")
 
+	WEBSOCKET_PATH := "/api/socket-io/"
 	r := routes.SetupRouter()
 	// Khởi tạo server Socket.IO từ utils
 	socketServer, err := utils.InitSocketServer()
 	if err != nil {
 		log.Fatal("Socket.IO initialization failed:", err)
 	}
-	WEBSOCKET_PATH := os.Getenv("WEBSOCKET_PATH")
 	// Đăng ký http.Handler của socketServer vào Gin
 	r.GET(WEBSOCKET_PATH+"*any", gin.WrapH(socketServer))
 	r.POST(WEBSOCKET_PATH+"*any", gin.WrapH(socketServer))
