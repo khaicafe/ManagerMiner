@@ -27,12 +27,20 @@ func GetAllMiners(c *gin.Context) {
 }
 
 func UpdateMinersList(c *gin.Context) {
+	// var payload []struct {
+	// 	ID             uint   `json:"id"`
+	// 	PoolURL        string `json:"pool_url"`
+	// 	PoolPort       int    `json:"pool_port"`
+	// 	WalletAddress  string `json:"wallet_address"`
+	// 	MaxThreadsHint int    `json:"max_threads_hint"`
+	// }
+
 	var payload []struct {
-		ID             uint   `json:"id"`
-		PoolURL        string `json:"pool_url"`
-		PoolPort       int    `json:"pool_port"`
-		WalletAddress  string `json:"wallet_address"`
-		MaxThreadsHint int    `json:"max_threads_hint"`
+		ID             uint    `json:"id"`
+		PoolURL        *string `json:"pool_url"`
+		PoolPort       *int    `json:"pool_port"`
+		WalletAddress  *string `json:"wallet_address"`
+		MaxThreadsHint *int    `json:"max_threads_hint"`
 	}
 
 	if err := c.ShouldBindJSON(&payload); err != nil {
@@ -55,17 +63,36 @@ func UpdateMinersList(c *gin.Context) {
 			return
 		}
 
-		// Update 4 field gốc
-		miner.PoolURL = minerData.PoolURL
-		miner.PoolPort = minerData.PoolPort
-		miner.WalletAddress = minerData.WalletAddress
-		miner.MaxThreadsHint = minerData.MaxThreadsHint
+		// // Update 4 field gốc
+		// miner.PoolURL = minerData.PoolURL
+		// miner.PoolPort = minerData.PoolPort
+		// miner.WalletAddress = minerData.WalletAddress
+		// miner.MaxThreadsHint = minerData.MaxThreadsHint
 
-		// Ghi đè field config từ client gửi lên
-		miner.PoolURLConfig = minerData.PoolURL
-		miner.PoolPortConfig = minerData.PoolPort
-		miner.WalletAddressConfig = minerData.WalletAddress
-		miner.MaxThreadsHintConfig = minerData.MaxThreadsHint
+		// // Ghi đè field config từ client gửi lên
+		// miner.PoolURLConfig = minerData.PoolURL
+		// miner.PoolPortConfig = minerData.PoolPort
+		// miner.WalletAddressConfig = minerData.WalletAddress
+		// miner.MaxThreadsHintConfig = minerData.MaxThreadsHint
+
+		// Chỉ update nếu có giá trị khác nil
+		// Chỉ update nếu có giá trị khác nil và khác "" hoặc 0
+		if minerData.PoolURL != nil && *minerData.PoolURL != "" {
+			miner.PoolURL = *minerData.PoolURL
+			miner.PoolURLConfig = *minerData.PoolURL
+		}
+		if minerData.PoolPort != nil && *minerData.PoolPort != 0 {
+			miner.PoolPort = *minerData.PoolPort
+			miner.PoolPortConfig = *minerData.PoolPort
+		}
+		if minerData.WalletAddress != nil && *minerData.WalletAddress != "" {
+			miner.WalletAddress = *minerData.WalletAddress
+			miner.WalletAddressConfig = *minerData.WalletAddress
+		}
+		if minerData.MaxThreadsHint != nil && *minerData.MaxThreadsHint != 0 {
+			miner.MaxThreadsHint = *minerData.MaxThreadsHint
+			miner.MaxThreadsHintConfig = *minerData.MaxThreadsHint
+		}
 
 		if err := tx.Save(&miner).Error; err != nil {
 			tx.Rollback()

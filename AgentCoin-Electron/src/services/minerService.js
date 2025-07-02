@@ -6,17 +6,26 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const { app } = require("electron");
+const { logToFile } = require("./main-log.js");
 
 async function getMinerConfigPath() {
   if (app && app.isPackaged) {
-    return path.join(process.resourcesPath, "miner.json");
+    const userDataPath = app.getPath("userData");
+    let minerConfigPath = path.join(userDataPath, "miner.json");
+    // path.join(process.resourcesPath, "miner.json");
+    logToFile(
+      `🌐 log1 service: ${path.join(process.resourcesPath, "miner.json")}`
+    );
+    return minerConfigPath;
   } else {
+    logToFile(`🌐 log1: ${path.join(__dirname, "..", "..", "miner.json")}`);
     return path.join(__dirname, "..", "..", "miner.json");
   }
 }
 
 async function readMinerConfig() {
   const configPath = await getMinerConfigPath();
+  logToFile(`🌐 log2 service: ${configPath}`);
   try {
     const raw = fs.readFileSync(configPath, "utf-8");
     return JSON.parse(raw);

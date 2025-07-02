@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -105,44 +106,45 @@ func SetupRouter() *gin.Engine {
 
 	}
 
-	// // Serve frontend build (React)
-	// r.Static("/assets", filepath.Join("..", "BackOffice", "dist", "assets"))
-	// r.StaticFile("/vite.svg", filepath.Join("..", "BackOffice", "dist", "vite.svg"))
-	// r.StaticFile("/", filepath.Join("..", "BackOffice", "dist", "index.html"))
-
-	// // Fallback to index.html for SPA routes
-	// r.NoRoute(func(c *gin.Context) {
-	// 	uri := c.Request.RequestURI
-	// 	if filepath.Ext(uri) == "" {
-	// 		c.File(filepath.Join("dist", "index.html"))
-	// 	} else {
-	// 		c.Status(http.StatusNotFound)
-	// 	}
-	// })
-
 	exePath, _ := os.Executable()
 	dir := filepath.Dir(exePath)
+	isDev := strings.Contains(exePath, os.TempDir())
+	if isDev {
+		// Serve frontend build (React)
+		r.Static("/assets", filepath.Join("..", "BackOffice", "dist", "assets"))
+		r.StaticFile("/vite.svg", filepath.Join("..", "BackOffice", "dist", "vite.svg"))
+		r.StaticFile("/", filepath.Join("..", "BackOffice", "dist", "index.html"))
 
-	frontendPath, err := filepath.Abs(filepath.Join(dir, "dist"))
-	log.Println("Frontend path:", frontendPath)
+		// Fallback to index.html for SPA routes
+		r.NoRoute(func(c *gin.Context) {
+			uri := c.Request.RequestURI
+			if filepath.Ext(uri) == "" {
+				c.File(filepath.Join("dist", "index.html"))
+			} else {
+				c.Status(http.StatusNotFound)
+			}
+		})
+	} else {
+		frontendPath, err := filepath.Abs(filepath.Join(dir, "dist"))
+		log.Println("Frontend path:", frontendPath)
 
-	r.Static("/assets", filepath.Join(frontendPath, "assets"))
-	r.StaticFile("/vite.svg", filepath.Join(frontendPath, "vite.svg"))
-	r.StaticFile("/", filepath.Join(frontendPath, "index.html"))
+		r.Static("/assets", filepath.Join(frontendPath, "assets"))
+		r.StaticFile("/vite.svg", filepath.Join(frontendPath, "vite.svg"))
+		r.StaticFile("/", filepath.Join(frontendPath, "index.html"))
 
-	if err != nil {
-		log.Fatal("Failed to resolve frontend path:", err)
-	}
-
-	// Fallback to index.html for SPA routes
-	r.NoRoute(func(c *gin.Context) {
-		uri := c.Request.RequestURI
-		if filepath.Ext(uri) == "" {
-			c.File(filepath.Join(frontendPath, "index.html"))
-		} else {
-			c.Status(http.StatusNotFound)
+		if err != nil {
+			log.Fatal("Failed to resolve frontend path:", err)
 		}
-	})
+		// Fallback to index.html for SPA routes
+		r.NoRoute(func(c *gin.Context) {
+			uri := c.Request.RequestURI
+			if filepath.Ext(uri) == "" {
+				c.File(filepath.Join(frontendPath, "index.html"))
+			} else {
+				c.Status(http.StatusNotFound)
+			}
+		})
+	}
 
 	return r
 }

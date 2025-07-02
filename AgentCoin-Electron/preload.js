@@ -28,4 +28,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("max-threads-hint", (e, hint) => {
       callback(hint);
     }),
+
+  onStatusStartStop: (callback) =>
+    ipcRenderer.on("onStatusStartStop", (e, hint) => {
+      callback(hint);
+    }),
 });

@@ -115,6 +115,11 @@ window.electronAPI.onMaxThreadsHint((hint) => {
   document.getElementById("miningSpeed").value = hint;
 });
 
+window.electronAPI.onStatusStartStop((hint) => {
+  // Gán giá trị vào span
+  statusText.innerText = hint;
+});
+
 // get info about
 window.electronAPI.onAboutInfoLoaded((about) => {
   console.log("🎉 ABOUT INFO:", about);

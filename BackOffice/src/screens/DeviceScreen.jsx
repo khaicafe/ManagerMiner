@@ -83,10 +83,10 @@ const MinersScreen = () => {
 
   const handleEdit = async () => {
     try {
-      if (!selectedPool || !selectedWallet) {
-        alert("Please select both pool and wallet.");
-        return;
-      }
+      // if (!selectedPool || !selectedWallet) {
+      //   alert("Please select both pool and wallet.");
+      //   return;
+      // }
 
       const selectedMiners = miners.filter((m) => selectedIds.includes(m.id));
 

@@ -7,6 +7,7 @@ const { spawn, exec, execSync } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const minerConfig = require("./src/services/minerConfig.js");
+const { logToFile } = require("./src/services/main-log.js");
 
 const isDev = !app.isPackaged;
 
@@ -98,6 +99,7 @@ function killXmrigProcesses() {
     }
     console.log(`✅ Killed xmrig processes`);
   });
+  minerStatus = "Running";
 }
 killXmrigProcesses();
 
@@ -112,8 +114,10 @@ clearLog();
 async function restMiner() {
   clearLog();
   killXmrigProcesses();
-  await sleep(5000);
-  startMiner();
+  if (minerStatus == "Running") {
+    await sleep(5000);
+    startMiner();
+  }
 }
 
 function getDeviceUUID() {
@@ -301,50 +305,56 @@ function parseHashrateFromLog() {
 }
 
 async function getMinerInfo() {
-  let minerName = "";
-  let serverUrl = "";
-  if (fs.existsSync(configPath)) {
-    const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    minerName = config.miner_name || "";
-    serverUrl = config.server_url || "";
+  try {
+    let minerName = "";
+    let serverUrl = "";
+    if (fs.existsSync(configPath)) {
+      const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+      minerName = config.miner_name || "";
+      serverUrl = config.server_url || "";
+    }
+
+    const about = aboutInfoCache || {};
+    const cpuModel = about["CPU"] || "Unknown";
+    const lastLog = extractLastLogLine();
+    const temperature = await getCPUTemperature();
+    const localIP = getLocalIPAddress();
+    const cpuUsage = await getCPUUsagePercent();
+    const { timestamp, hashrate, threads } = parseHashrateFromLog();
+    const deviceID = getDeviceUUID();
+    const wallet = minerConfig.getWallet();
+    const pool = minerConfig.getPool();
+    const [url, portStr] = pool.split(":");
+    const port = parseInt(portStr, 10);
+    const max_threads_hint = minerConfig.getMaxThreadsHint();
+
+    const payload = {
+      deviceID,
+      status: true,
+      name: minerName || "YourMinerName",
+      ip: localIP,
+      hashrate,
+      threads,
+      temperature,
+      uptime: timestamp,
+      platform: getPlatformInfo(),
+      last_log: lastLog,
+      cpu_model: cpuModel,
+      cpu_usage: cpuUsage,
+      is_mining: minerStatus,
+      pool_url: url,
+      pool_port: port,
+      wallet_address: wallet,
+      max_threads_hint,
+    };
+
+    logToFile(`🌐 getMinerInfo: ${JSON.stringify(payload, null, 2)}`);
+    const res = await handleReport(payload);
+    logToFile(`🌐 getMinerInfo: ${JSON.stringify(res, null, 2)}`);
+    return payload;
+  } catch (error) {
+    logToFile(`🌐 getMinerInfo error: ${JSON.stringify(error, null, 2)}`);
   }
-
-  const about = aboutInfoCache || {};
-  const cpuModel = about["CPU"] || "Unknown";
-  const lastLog = extractLastLogLine();
-  const temperature = await getCPUTemperature();
-  const localIP = getLocalIPAddress();
-  const cpuUsage = await getCPUUsagePercent();
-  const { timestamp, hashrate, threads } = parseHashrateFromLog();
-  const deviceID = getDeviceUUID();
-  const wallet = minerConfig.getWallet();
-  const pool = minerConfig.getPool();
-  const [url, portStr] = pool.split(":");
-  const port = parseInt(portStr, 10);
-  const max_threads_hint = minerConfig.getMaxThreadsHint();
-
-  const payload = {
-    deviceID,
-    status: true,
-    name: minerName || "YourMinerName",
-    ip: localIP,
-    hashrate,
-    threads,
-    temperature,
-    uptime: timestamp,
-    platform: getPlatformInfo(),
-    last_log: lastLog,
-    cpu_model: cpuModel,
-    cpu_usage: cpuUsage,
-    is_mining: minerStatus,
-    pool_url: url,
-    pool_port: port,
-    wallet_address: wallet,
-    max_threads_hint,
-  };
-
-  handleReport(payload);
-  return payload;
 }
 
 let retryTimer = null;
@@ -473,7 +483,7 @@ function createWindow() {
   //   : path.join(process.resourcesPath, "icon.ico");
   mainWindow.setIcon(path.join(__dirname, "icon.png"));
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Chặn sự kiện close → chỉ hide
   mainWindow.on("close", (event) => {
@@ -531,6 +541,7 @@ function startMiner() {
   minerProcess = spawn(minerPath, ["-c", xmrigConfigPath], options);
   console.log("🚀 Miner started with PID:", minerProcess.pid);
   minerStatus = "Running";
+  mainWindow.webContents.send("onStatusStartStop", minerStatus);
 
   if (showConsole) {
     minerProcess.stdout.setEncoding("utf8");
@@ -573,6 +584,7 @@ function stopMiner() {
     killXmrigProcesses();
     console.log("🛑 Miner stopped");
     minerStatus = "Stopped";
+    mainWindow.webContents.send("onStatusStartStop", minerStatus);
     minerProcess = null;
   } else {
     console.log("ℹ️ Miner not running");
@@ -716,7 +728,9 @@ const handleReport = async (payload) => {
   try {
     const response = await reportMinerStatus(payload);
     console.log("Report response:", response);
+    logToFile(`🌐 Report: ${JSON.stringify(response, null, 2)}`);
   } catch (error) {
     console.error("Failed to report miner status", error);
+    logToFile(`🌐 Report error: ${JSON.stringify(error, null, 2)}`);
   }
 };
