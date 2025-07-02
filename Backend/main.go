@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,7 @@ func (p *program) run() {
 
 	var DB *gorm.DB
 	var err error
+	var dbFile string
 	exePath, _ := os.Executable()
 	isDev := strings.Contains(exePath, os.TempDir())
 
@@ -42,9 +44,19 @@ func (p *program) run() {
 		}
 		log.Println("✅ Using DEV DB:", isDev)
 	} else {
-		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-		dbFile := filepath.Join(dir, "db", "data.db")
-
+		if runtime.GOOS == "windows" {
+			dbFolder := `C:\minerCoin\db`
+			err := os.MkdirAll(dbFolder, os.ModePerm)
+			if err != nil {
+				log.Fatal("❌ Failed to create DB folder:", err)
+			}
+			dbFile = filepath.Join(dbFolder, "data.db")
+			log.Println("🚀 Windows release mode. Using DB path:", dbFile)
+		} else {
+			dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+			dbFile = filepath.Join(dir, "db", "data.db")
+			log.Println("🚀 Non-Windows release mode. Using DB path:", dbFile)
+		}
 		// Gắn query string riêng
 		dsn := dbFile + "?_busy_timeout=5000"
 
@@ -55,7 +67,6 @@ func (p *program) run() {
 		if err != nil {
 			log.Fatal("failed to connect database:", err)
 		}
-
 		log.Println("Connected DB OK!", DB)
 	}
 

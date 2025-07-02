@@ -633,6 +633,11 @@ ipcMain.on("save-config", (event, { serverIp, minerName }) => {
     fs.writeFileSync(xmrigConfigPath, JSON.stringify(xmrigConf, null, 2));
     console.log("🔧 Updated XMRig config with new miner_name.");
   }
+
+  console.log("♻️ Restarting app...");
+
+  app.relaunch();
+  app.exit(0);
 });
 
 ipcMain.handle("getMinerStatus", () => {
