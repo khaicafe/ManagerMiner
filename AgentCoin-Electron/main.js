@@ -6,6 +6,7 @@ const path = require("path");
 const { spawn, exec, execSync } = require("child_process");
 const fs = require("fs");
 const os = require("os");
+const minerConfig = require("./src/services/minerConfig.js");
 
 const isDev = !app.isPackaged;
 
@@ -59,7 +60,6 @@ const {
   getMinerConfig,
   updateMaxHint,
 } = require("./src/services/minerService");
-const minerConfig = require("./src/services/minerConfig.js");
 
 let mainWindow;
 let minerProcess = null;
@@ -257,7 +257,8 @@ async function getCPUTemperature() {
 function parseHashrateFromLog() {
   if (!fs.existsSync(logPath)) {
     console.log("⚠️ xmrig.log not found.");
-    return { timestamp: "", hashrate: 0, threads: null };
+    fs.writeFileSync(logPath, "");
+    // return { timestamp: "", hashrate: 0, threads: null };
   }
 
   try {
@@ -466,7 +467,13 @@ function createWindow() {
   });
 
   mainWindow.loadFile("index.html");
-  mainWindow.setIcon(path.join(__dirname, "icon.ico"));
+
+  // const icon = isDev
+  //   ? path.join(__dirname, "icon.ico")
+  //   : path.join(process.resourcesPath, "icon.ico");
+  mainWindow.setIcon(path.join(__dirname, "icon.png"));
+
+  mainWindow.webContents.openDevTools();
 
   // Chặn sự kiện close → chỉ hide
   mainWindow.on("close", (event) => {
@@ -477,7 +484,7 @@ function createWindow() {
   });
 
   // Tạo Tray icon
-  tray = new Tray(path.join(__dirname, "icon.ico"));
+  tray = new Tray(path.join(__dirname, "icon.png"));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: "Hiện cửa sổ",

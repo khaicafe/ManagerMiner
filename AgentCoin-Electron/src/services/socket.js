@@ -2,17 +2,66 @@ const io = require("socket.io-client");
 const config = require("../config/index.js"); // adjust path as needed
 const os = require("os");
 const { execSync } = require("child_process");
-const minerConfig = require("../../miner.json");
+// const minerConfig = require("../../miner.json");
+const path = require("path");
+const { app } = require("electron");
+const fs = require("fs");
 
-const SERVER_URL = ()=>{
-  const fullUrl = minerConfig.server_url;
-  const urlObj = new URL(fullUrl);
-  return urlObj.origin
+const { logToFile } = require("./main-log.js");
+
+async function getMinerConfigPath() {
+  if (app && app.isPackaged) {
+    const userDataPath = app.getPath("userData");
+    let minerConfigPath = path.join(userDataPath, "miner.json");
+    // path.join(process.resourcesPath, "miner.json");
+    logToFile(`🌐 log1: ${path.join(process.resourcesPath, "miner.json")}`);
+    return minerConfigPath;
+  } else {
+    logToFile(`🌐 log1: ${path.join(__dirname, "..", "..", "miner.json")}`);
+    return path.join(__dirname, "..", "..", "miner.json");
+  }
 }
 
-// const SERVER_URL = config.WEBSOCKET_URL;
-const PATH = config.WEBSOCKET_PATH;
+async function readMinerConfig() {
+  const configPath = await getMinerConfigPath();
+  logToFile(`🌐 log2: ${configPath}`);
+  try {
+    const raw = fs.readFileSync(configPath, "utf-8");
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error("❌ Cannot read miner.json:", e.message);
+    return {};
+  }
+}
 
+const SERVER_URL = async () => {
+  const minerConfig = await readMinerConfig();
+
+  // const fullUrl = minerConfig.server_url;
+  // console.error("⚠️ server_url missing in miner.json!",fullUrl);
+  // const urlObj = new URL(fullUrl);
+  // return urlObj.origin;
+  // if (!minerConfig.server_url) {
+  //   console.error("⚠️ server_url missing in miner.json!");
+  //   return "";
+  // }
+
+  try {
+    logToFile(`🌐 log3: ${JSON.stringify(minerConfig, null, 2)}`);
+    const fullUrl = minerConfig.server_url;
+    logToFile(`🌐 log4: ${JSON.stringify(fullUrl, null, 2)}`);
+
+    const urlObj = new URL(fullUrl);
+    return urlObj.origin;
+  } catch (e) {
+    console.error("❌ Invalid URL in miner.json:", minerConfig.server_url);
+    return "";
+  }
+};
+
+// const SERVER_URL = config.WEBSOCKET_URL;
+// const PATH = config.WEBSOCKET_PATH;
+const PATH = "/api/socket-io";
 // const SERVER_URL = "http://localhost:8080";
 // const PATH = "/api/socket-io";
 // console.log("path socket", config);
@@ -54,16 +103,17 @@ function getDeviceUUID() {
 
 const USER_ID = getDeviceUUID(); // Thay thế bằng user ID thực tế của bạn
 
-function initSocket(onConnectedCallback) {
-  console.log("socket:", SERVER_URL(), "path:", PATH);
+async function initSocket(onConnectedCallback) {
+  console.log("socket:", await SERVER_URL(), "path:", PATH);
 
-  socket = io(SERVER_URL(), {
+  socket = io(await SERVER_URL(), {
     transports: ["websocket"],
     path: PATH,
   });
 
   socket.on("connect", () => {
     console.log("✅ Connected to server");
+    logToFile(`🌐 log5: "✅ Connected to server"`);
     socket.emit("registerUser", USER_ID);
     if (typeof onConnectedCallback === "function") {
       onConnectedCallback();

@@ -14,24 +14,16 @@ import (
 func GetAllMiners(c *gin.Context) {
 	var miners []models.MinerStatus
 
-	// Lấy các bản ghi mới nhất mỗi miner (theo Name)
-	err := models.DB.
-		Raw(`
-			SELECT * FROM miner_statuses m1
-			WHERE m1.id = (
-				SELECT MAX(m2.id)
-				FROM miner_statuses m2
-				WHERE m2.name = m1.name
-			)
-			ORDER BY m1.reported_at DESC
-		`).Scan(&miners).Error
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "models error"})
+	result := models.DB.Find(&miners)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": result.Error.Error(),
+		})
 		return
 	}
 
 	c.JSON(http.StatusOK, miners)
+
 }
 
 func UpdateMinersList(c *gin.Context) {

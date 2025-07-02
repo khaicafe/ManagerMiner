@@ -1,13 +1,23 @@
 const fs = require("fs");
 const path = require("path");
+const { app } = require("electron");
+// const xmrigConfigPath = path.join(
+//   __dirname,
+//   "..",
+//   "..",
+//   "xmrig",
+//   "config.json"
+// );
 
-const xmrigConfigPath = path.join(
-  __dirname,
-  "..",
-  "..",
-  "xmrig",
-  "config.json"
-);
+function getXmrigConfigPath() {
+  const basePath =
+    app && app.isPackaged
+      ? process.resourcesPath
+      : path.join(__dirname, "..", "..");
+
+  return path.join(basePath, "xmrig", "config.json");
+}
+const xmrigConfigPath = getXmrigConfigPath();
 
 function getConfig() {
   try {
@@ -52,19 +62,23 @@ function getMaxThreadsHint() {
   return null;
 }
 
-function setMinerConfig({ wallet, pool, threadsHint }) {
-  const config = getConfig();
+async function setMinerConfig({ wallet, pool, threadsHint }) {
+  console.log("setMinerconfig", pool, wallet, threadsHint);
+  const config = await getConfig();
   if (config && config.pools && config.pools.length > 0) {
-    if (wallet) {
-      config.pools[0].user = wallet;
-    }
-    if (pool) {
-      config.pools[0].url = pool;
-    }
-    if (threadsHint != null && config.cpu) {
-      config.cpu["max-threads-hint"] = threadsHint;
-    }
-
+    config.pools[0].user = wallet;
+    config.pools[0].url = pool;
+    config.cpu["max-threads-hint"] = threadsHint;
+    // if (wallet) {
+    //   config.pools[0].user = wallet;
+    // }
+    // if (pool) {
+    //   config.pools[0].url = pool;
+    // }
+    // if (threadsHint != null && config.cpu) {
+    //   config.cpu["max-threads-hint"] = threadsHint;
+    // }
+    console.log("change config", config.pools);
     saveConfig(config);
   }
 }
