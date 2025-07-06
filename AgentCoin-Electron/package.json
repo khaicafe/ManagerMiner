@@ -11,6 +11,7 @@
     "dist_all": "electron-builder -mwl"
   },
   "build": {
+    "afterPack": "./build/afterPack.js",
     "nsis": {
       "include": "build/installer.nsh",
       "oneClick": false,
