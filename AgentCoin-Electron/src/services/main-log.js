@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
+const { Tray, Menu, app, BrowserWindow, ipcMain } = require("electron");
 
-const logPath = path.join(process.cwd(), "agentcoin-main.log");
+// const logPath = path.join(process.cwd(), "agentcoin-main.log");
+
+const isDev = !app.isPackaged;
+const logPath = isDev
+  ? path.join(process.cwd(), "agentcoin-main.log")
+  : path.join(app.getPath("userData"), "agentcoin-main.log");
 
 function logToFile(message) {
   console.log(message);

@@ -8,10 +8,11 @@
     "start": "electron .",
     "build_mac_win": "electron-builder -mw -p always",
     "build_win": "electron-builder -w -p always",
+    "build_mac_arm64": "electron-builder --mac --arm64",
+    "build_mac_intel": "electron-builder --mac --x64",
     "dist_all": "electron-builder -mwl"
   },
   "build": {
-    "afterPack": "./build/afterPack.js",
     "nsis": {
       "include": "build/installer.nsh",
       "oneClick": false,
@@ -24,6 +25,15 @@
       "target": "nsis",
       "cscLink": "ca.pfx",
       "cscKeyPassword": "1"
+    },
+    "mac": {
+      "icon": "icon.icns",
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
     },
     "asar": true,
     "extraResources": [
