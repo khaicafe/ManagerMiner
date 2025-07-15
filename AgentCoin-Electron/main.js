@@ -1,6 +1,13 @@
 // main.js (Main Process)
 
-const { Tray, Menu, app, BrowserWindow, ipcMain } = require("electron");
+const {
+  Tray,
+  Menu,
+  app,
+  BrowserWindow,
+  ipcMain,
+  nativeImage,
+} = require("electron");
 const socketModule = require("./src/services/socket");
 const path = require("path");
 const { spawn, exec, execSync } = require("child_process");
@@ -494,7 +501,10 @@ function createWindow() {
   });
 
   // Tạo Tray icon
-  tray = new Tray(path.join(__dirname, "icon.png"));
+  let iconPath = path.join(__dirname, "icon.png");
+  let trayIcon = nativeImage.createFromPath(iconPath);
+  trayIcon = trayIcon.resize({ width: 16, height: 16 });
+  tray = new Tray(trayIcon);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: "Hiện cửa sổ",
